@@ -1,5 +1,6 @@
 package com.example.snake;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 /*
@@ -9,8 +10,11 @@ Two methods are involved, which are getSnake() and setSnake().
 
  */
 public class Snake {
-    private List<Position> snake = new LinkedList<Position>();
-    public List<Position> getSnake(){
+
+    //public static List<Position> mSnakePositions = new ArrayList<>();
+
+    public static List<Position> snake = new LinkedList<Position>();
+    public static List<Position> getSnake(){
         return snake;
     }
     public void setSnake(List<Position> snake){
