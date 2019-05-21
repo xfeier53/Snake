@@ -23,7 +23,7 @@ public class Food {
     }
 
     public void setY(int y) {
-        this.y = y;random.nextInt(background.getGridSize()-1);
+        this.y = y;
     }
 
     private void generateFood(){
