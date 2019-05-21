@@ -17,19 +17,20 @@ public class MainActivity extends AppCompatActivity {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        gameView = new GameView(this);
+        gameView = new GameView(this,size);
         setContentView(gameView);
 //        sendControlMessage();
-        @Override
-                protected  void onResume(){
-            super.onResume();
-            gameView.resume();
-        }
-        @Override
-                protected void onPause(){
-            super.onPause();
-            gameView.pause();
-        }
+
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        gameView.resume();
+    }
+    @Override
+    protected void onPause(){
+        super.onPause();
+        gameView.pause();
     }
 
 }

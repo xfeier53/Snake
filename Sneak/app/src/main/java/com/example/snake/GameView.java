@@ -124,12 +124,6 @@ public class GameView extends SurfaceView implements Runnable {
             }
         }
     }
-    while(m_Playing){
-        if(checkForUpdate()){
-            updateGame();
-            drawGame();
-        }
-    }
 
     public void pause(){
         m_Playing=false;
@@ -157,16 +151,16 @@ public class GameView extends SurfaceView implements Runnable {
         spawnFood();
 
         // initial socre to 0
-        m_Score = 0;
+        m_score= 0;
 
-        m_NextFrameTIme = System.currentTimeMillis();
+        m_NextFrameTime = System.currentTimeMillis();
     }
 
     // initial a mouse
     public void spawnFood() {
         Random random = new Random();
-        food_x = random.nextInt(NUM_BLOCKs_WIDE - 1) + 1;
-        food_y = random.nextInt(m_NumBlocksHigh - 1) + 1;
+        food_x = random.nextInt(block_wide - 1) + 1;
+        food_y = random.nextInt(block_high - 1) + 1;
     }
 
     private void eatFood(){
@@ -189,13 +183,13 @@ public class GameView extends SurfaceView implements Runnable {
 
         // move the head direction
         switch (m_direction){
-            case UP:
+            case TOP:
                 snake_y[0]--;
                 break;
             case RIGHT:
                 snake_x[0]++;
                 break;
-            case DOWN:
+            case BOTTOM:
                 snake_y[0]++;
                 break;
             case LEFT:
@@ -214,10 +208,10 @@ public class GameView extends SurfaceView implements Runnable {
         if (snake_x[0] >= block_wide){
             dead = true;
         }
-        if (snake_y == -1){
+        if (snake_y[0] == -1){
             dead = true;
         }
-        if(snake_y == block_high){
+        if(snake_y[0] == block_high){
             dead= true;
         }
 
@@ -230,25 +224,14 @@ public class GameView extends SurfaceView implements Runnable {
         return dead;
     }
 
-}
-public void pause(){
-    m_Playing =false;
-    try{
-        m_Thread.join();
-    } catch(InterruptedException e){}
-}
-public void resume(){
-    m_Playing = true;
-    m_Thread = new Thread(this);
-    m_Thread.start();
-}
+
 public void updateGame(){
     if(snake_x[0]==food_x&&snake_y[0]==food_y){
         eatFood();
     }
     moveSnake();
     if(detectDeath()){
-        staryGame();
+        startGame();
     }
 }
 public void drawGame(){
@@ -315,7 +298,8 @@ public boolean onTouchEvent(MotionEvent motionEvent){
                         break;
                 }
             }
-            return true;
+
     }
+    return true;
 }
 }
