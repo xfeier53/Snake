@@ -10,9 +10,8 @@ Two methods are involved, which are getSnake() and setSnake().
 
  */
 public class Snake {
-
-    //public static List<Position> mSnakePositions = new ArrayList<>();
-
+    private Position snake_head;
+    SnakeDirection snake_direction = SnakeDirection.RIGHT;
     public static List<Position> snake = new LinkedList<Position>();
     public static List<Position> getSnake(){
         return snake;
@@ -20,4 +19,5 @@ public class Snake {
     public void setSnake(List<Position> snake){
         this.snake = snake;
     }
+
 }
