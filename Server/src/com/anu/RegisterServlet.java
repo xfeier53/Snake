@@ -1,6 +1,8 @@
 package com.anu;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,12 +19,18 @@ public class RegisterServlet extends HttpServlet {
         
         boolean isRegisterSuccessful = false;
         Register register = new Register();
+        String result;
         isRegisterSuccessful=register.userRegister(userID, password, email);
+        PrintWriter out = response.getWriter();
         if(isRegisterSuccessful){
-        	System.out.println("yes");
-        } else{
-        	System.out.println("no");
+            result = "success";
         }
+        else {
+            result = "fail";
+        }
+        out.write(result);
+        out.flush();
+        out.close();
     }
  
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -15,14 +15,19 @@ public class LoginServlet extends HttpServlet {
         String userID = request.getParameter("userID");
         String password = request.getParameter("password");
                 
+        String result;
         Login login = new Login();        
         boolean isLoginSuccessful = login.userLogin(userID, password);
+        PrintWriter out = response.getWriter();
         if(isLoginSuccessful){
-            System.out.println("yes");
+            result = "success";
         }
         else {
-            System.out.println("no");
+            result = "fail";
         }
+        out.write(result);
+        out.flush();
+        out.close();
     }
  
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

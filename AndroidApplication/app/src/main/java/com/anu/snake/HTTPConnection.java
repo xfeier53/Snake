@@ -11,10 +11,11 @@ import java.net.URLEncoder;
 
 public class HTTPConnection {
 
-    static final String PORT = "8808";
+    static final String PORT = "8080";
+    static final String IP = "10.0.0.9";
 
     public static String LoginByPost(String id, String password) {
-        String address = "http://localhost:" + PORT + "/login";
+        String address = "http://" + IP + ":" + PORT + "/AndroidServer/login";
         String result = "";
         try {
             // Connect with POST method
@@ -27,7 +28,7 @@ public class HTTPConnection {
             // Set cache for Post
             conn.setUseCaches(false);
             // Request
-            String data = "id=" + URLEncoder.encode(id, "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8");
+            String data = "userID=" + URLEncoder.encode(id, "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8");
             // Get output stream
             OutputStream out = conn.getOutputStream();
             out.write(data.getBytes());
@@ -59,7 +60,7 @@ public class HTTPConnection {
     }
 
     public static String RegisterByPost(String id, String password, String email) {
-        String address = "http://localhost:" + PORT + "/register";
+        String address = "http://" + IP + ":" + PORT + "/AndroidServer/register";
         String result = "";
         try {
             URL url = new URL(address);
@@ -71,7 +72,7 @@ public class HTTPConnection {
             // Set cache for Post
             conn.setUseCaches(false);
             // Request
-            String data = "id=" + URLEncoder.encode(id, "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8") + "&email=" + URLEncoder.encode(email, "UTF-8");
+            String data = "userID=" + URLEncoder.encode(id, "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8") + "&email=" + URLEncoder.encode(email, "UTF-8");
             // Get output stream
             OutputStream out = conn.getOutputStream();
             out.write(data.getBytes());

@@ -6,24 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/id"
+    <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
         android:ems="10"
-        android:inputType="text"
-        android:hint="Account"/>
+        android:gravity="center"
+        android:text="SNAKE!"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30sp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/account"
+        android:textColor="@color/colorPrimary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:ems="10"
+        android:hint="Account"
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/password"
+        android:textColor="@color/colorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/id"
-        android:layout_alignRight="@+id/id"
-        android:layout_below="@+id/id"
+        android:layout_alignEnd="@+id/account"
+        android:layout_alignRight="@+id/account"
+        android:layout_below="@+id/account"
         android:layout_marginTop="28dp"
         android:ems="10"
         android:inputType="textPassword"
@@ -32,6 +48,7 @@
     <Button
         android:id="@+id/login"
         android:text="Login"
+        android:textColor="@color/colorPrimary"
         android:layout_marginTop="20dp"
         android:layout_below="@id/password"
         android:layout_width="wrap_content"
@@ -41,6 +58,7 @@
     <Button
         android:id="@+id/register"
         android:text="Register"
+        android:textColor="@color/colorPrimary"
         android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
