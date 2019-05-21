@@ -253,6 +253,7 @@ public void updateGame(){
     moveSnake();
     if(detectDeath()){
         startGame();
+        normal_count = 0;
     }
 }
 //This is the function which draw the entire game layout, snake, food, special food and obstacle.
@@ -309,17 +310,17 @@ public boolean onTouchEvent(MotionEvent motionEvent){
                 int y = (int) (motionEvent.getY());
                 SnakeDirection direction = SnakeDirection.RIGHT;
                 if (Math.abs(x - this.x) > Math.abs(y - this.y)) {
-                    if (x > this.x) {
+                    if (x - this.x > 100) {
                         direction = SnakeDirection.RIGHT;
                     }
-                    if (x < this.x) {
+                    if (x - this.x < -100) {
                         direction = SnakeDirection.LEFT;
                     }
                 }else{
-                    if (y < this.y) {
+                    if (y - this.y < -100) {
                         direction = SnakeDirection.TOP;
                     }
-                    if (y > this.y) {
+                    if (y - this.y > 100) {
                         direction = SnakeDirection.BOTTOM;
                     }
                 }
