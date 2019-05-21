@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -40,7 +41,28 @@ public class GameView extends SurfaceView implements Runnable {
     private int block_size;
     private final int block_wide = 40;
     private int block_high;
-//    private Paint paint = new Paint();
+
+    public GameView(Context context, Point size) {
+        super(context);
+        m_context = context;
+        screen_width = size.x;
+        screen_height = size.y;
+
+        block_size = screen_width/block_wide;
+        block_high = screen_height/block_size;
+
+        m_Holder = getHolder();
+        m_Paint = new Paint();
+
+        // If the scores reach 200, the snake will be regenerated as a new one.
+        snake_x = new int[200];
+        snake_y = new int[200];
+
+        // Start the game
+        startGame();
+    }
+
+    //    private Paint paint = new Paint();
 //    private Background background = new Background();
 //    private Snake snake = new Snake();
 //    public GameView(Context context) {
@@ -93,8 +115,15 @@ public class GameView extends SurfaceView implements Runnable {
 //    private void drawFood(Canvas canvas){
 //        Food food = new Food();
 //    }
-@Override
+    @Override
     public void run(){
+        while(m_Playing){
+            if(checkForUpdate()){
+                updateGame();
+                drawGame();
+            }
+        }
+    }
     while(m_Playing){
         if(checkForUpdate()){
             updateGame();
@@ -102,6 +131,20 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
+    public void pause(){
+        m_Playing=false;
+        try{
+            m_Thread.join();
+        }catch (InterruptedException e){
+            //Error
+        }
+    }
+
+    public void resume(){
+        m_Playing = true;
+        m_Thread = new Thread(this);
+        m_Thread.start();
+    }
 }
 public void pause(){
     m_Playing =false;
