@@ -1,5 +1,6 @@
 package com.example.snake;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
@@ -145,6 +146,12 @@ public class GameView extends SurfaceView implements Runnable {
         // initial socre to 0
         m_score= 0;
 
+        // initial normal food counts
+        normal_count = 0;
+
+        // initial game speed
+        FPS = 5;
+
         m_NextFrameTime = System.currentTimeMillis();
     }
 
@@ -204,6 +211,9 @@ public class GameView extends SurfaceView implements Runnable {
 
         // update score
         m_score++;
+
+        // speed up the snake
+        speedUp();
     }
     //This function is called when the snake eats the special food, the length of the snake will be
     //added 5 if the special food is eaten.
@@ -212,9 +222,11 @@ public class GameView extends SurfaceView implements Runnable {
         m_score += 5;
         special_food();
         normal_count=0;
+        // slow down the snake
+        slowDown();
     }
 
-    //This function moves the position of the snake.
+    //This function add 10 to score after eating a suprise food
  private void eat_surprise(){
      m_score += 10;
  }
@@ -301,8 +313,6 @@ public void updateGame(){
     moveSnake();
     if(detectDeath()){
         startGame();
-        normal_count=0;
-        normal_count = 0;
     }
 }
 //This is the function which draw the entire game layout, snake, food, special food and obstacle.
@@ -360,7 +370,7 @@ public boolean checkForUpdate(){
 //This function defines the onTouchEvent, the snake will move the direction that the user slides into.
 // using swipe to control  the snake
 public boolean onTouchEvent(MotionEvent motionEvent){
-            int action = motionEvent.getAction()  & MotionEvent.ACTION_MASK;
+        int action = motionEvent.getAction()  & MotionEvent.ACTION_MASK;
            if (action == MotionEvent.ACTION_DOWN) {
                     x = (int) (motionEvent.getX());
                     y = (int) (motionEvent.getY());
@@ -402,4 +412,14 @@ public boolean onTouchEvent(MotionEvent motionEvent){
 
 
 }
+
+// This function will speed up the snake after eating food
+    private void speedUp(){
+        FPS++;
+    }
+
+    // This function will speed up the snake after eating a special food
+    private void slowDown(){
+        FPS -= 2;
+    }
 }
