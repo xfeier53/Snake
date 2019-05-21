@@ -57,6 +57,7 @@ public class GameView extends SurfaceView implements Runnable {
     private int special_food_y;
     private int reference_count = 5;
     private Paint special_food_paint = new Paint();
+    private Paint surprise_paint = new Paint();
     private int block_size;
     private final int block_wide = 40;
     private int block_high;
@@ -66,6 +67,19 @@ public class GameView extends SurfaceView implements Runnable {
     //constructor is called.
     private boolean firstTouch = false;
     private boolean isPause = false;
+    private int surprise_food_1_x = 0;
+    private int surprise_food_1_y = 0;
+    private int surprise_food_2_x = block_wide-1;
+    private int surprise_food_2_y = 0;
+    private int surprise_food_3_x = 0;
+    private int surprise_food_3_y = block_high-1;
+    private int surprise_food_4_x = block_wide-1;
+    private int surprise_food_4_y = block_high-1;
+    private boolean surprise_food_1 = true;
+    private boolean surprise_food_2 = true;
+    private boolean surprise_food_3 = true;
+    private boolean surprise_food_4 = true;
+
 
     public GameView(Context context, Point size) {
         super(context);
@@ -127,10 +141,8 @@ public class GameView extends SurfaceView implements Runnable {
 
         //Add a special food
         special_food();
-
         // Add an obstacle
         spawnObstacle();
-
         // initial socre to 0
         m_score= 0;
 
@@ -142,6 +154,18 @@ public class GameView extends SurfaceView implements Runnable {
         Random random = new Random();
         food_x = random.nextInt(block_wide - 1) + 1;
         food_y = random.nextInt(block_high - 1) + 1;
+    }
+    public void surprise_food(){
+
+            surprise_food_1_x = 0;
+            surprise_food_1_y = 0;
+            surprise_food_2_x = block_wide - 1;
+            surprise_food_2_y = 0;
+            surprise_food_3_x = 0;
+            surprise_food_3_y = block_high - 1;
+            surprise_food_4_x = block_wide - 1;
+            surprise_food_4_y = block_high - 1;
+
     }
 
     //Initial a obstacle
@@ -159,6 +183,9 @@ public class GameView extends SurfaceView implements Runnable {
         Random random = new Random();
         special_food_x = random.nextInt(block_wide - 1) + 1;
         special_food_y = random.nextInt(block_high - 1) + 1;
+        while(food_x>=special_food_x && special_food_x<=food_x+2 && food_y>=special_food_y && special_food_y<=food_y+5&&special_food_x>= obstacle_x&& special_food_x<=obstacle_x+2 && special_food_y>=obstacle_y && special_food_y<=obstacle_y+5){
+            spawnObstacle();
+        }
     }
 
     //A method which is called when the snake move into the food (eat the food）
@@ -170,7 +197,7 @@ public class GameView extends SurfaceView implements Runnable {
 
         // add another food
         spawnFood();
-
+        surprise_food();
         // add another obstacle
         spawnObstacle();
 
@@ -187,6 +214,10 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     //This function moves the position of the snake.
+ private void eat_surprise(){
+     m_score += 10;
+ }
+
     private void moveSnake(){
         for(int i = snake_length; i > 0; i--){
             snake_x[i] = snake_x[i - 1];
@@ -250,9 +281,26 @@ public void updateGame(){
     if(snake_x[0]==special_food_x&&snake_y[0]==special_food_y){
         eat_special_Food();
     }
+    if(snake_x[0]==surprise_food_1_x&&snake_y[0]==surprise_food_1_y){
+        eat_surprise();
+        surprise_food_1 = false;
+    }
+    if(snake_x[0]==surprise_food_2_x&&snake_y[0]==surprise_food_2_y){
+        eat_surprise();
+        surprise_food_2 = false;
+    }
+    if(snake_x[0]==surprise_food_3_x&&snake_y[0]==surprise_food_3_y){
+        eat_surprise();
+        surprise_food_3 = false;
+    }
+    if(snake_x[0]==surprise_food_4_x&&snake_y[0]==surprise_food_4_y){
+        eat_surprise();
+        surprise_food_4 = false;
+    }
     moveSnake();
     if(detectDeath()){
         startGame();
+        normal_count=0;
         normal_count = 0;
     }
 }
@@ -262,6 +310,7 @@ public void drawGame(){
         canvas = m_Holder.lockCanvas();
         canvas.drawColor(Color.argb(255,120,197,87));
         m_Paint.setColor(Color.argb(255, 255, 255, 255));
+        surprise_paint.setColor(Color.argb(255,80,255,255));
         obstacle_paint.setColor(Color.argb(255,255,120,120));
         special_food_paint.setColor(Color.argb(255,120,120,255));
         m_Paint.setTextSize(30);
@@ -275,6 +324,17 @@ public void drawGame(){
                     m_Paint);
         }
         //food and special food
+        if(m_score>=6) {
+            if (surprise_food_1)
+                canvas.drawRect(surprise_food_1_x * block_size, (surprise_food_1_y * block_size), (surprise_food_1_x * block_size) + block_size, (surprise_food_1_y * block_size) + block_size, surprise_paint);
+            if (surprise_food_2)
+                canvas.drawRect(surprise_food_2_x * block_size, (surprise_food_2_y * block_size), (surprise_food_2_x * block_size) + block_size, (surprise_food_2_y * block_size) + block_size, surprise_paint);
+            if (surprise_food_3)
+                canvas.drawRect(surprise_food_3_x * block_size, (surprise_food_3_y * block_size), (surprise_food_3_x * block_size) + block_size, (surprise_food_3_y * block_size) + block_size, surprise_paint);
+            if (surprise_food_4)
+                canvas.drawRect(surprise_food_4_x * block_size, (surprise_food_4_y * block_size), (surprise_food_4_x * block_size) + block_size, (surprise_food_4_y * block_size) + block_size, surprise_paint);
+        }
+        //food
         if (normal_count!=reference_count)
             canvas.drawRect(food_x*block_size,(food_y*block_size),(food_x*block_size)+block_size,(food_y*block_size)+block_size,m_Paint);
         else{
@@ -339,6 +399,44 @@ public boolean onTouchEvent(MotionEvent motionEvent){
                 }
             }
 
+
+    int action = motionEvent.getAction()  & MotionEvent.ACTION_MASK;
+    if (action == MotionEvent.ACTION_DOWN) {
+        x = (int) (motionEvent.getX());
+        y = (int) (motionEvent.getY());
+    }
+    if (action== MotionEvent.ACTION_UP) {
+        int x = (int) (motionEvent.getX());
+        int y = (int) (motionEvent.getY());
+        SnakeDirection direction = null;
+        if (Math.abs(x - this.x) > Math.abs(y - this.y)) {
+            if (x > this.x) {
+                direction = SnakeDirection.RIGHT;
+            }
+            if (x < this.x) {
+                direction = SnakeDirection.LEFT;
+            }
+        }else{
+            if (y < this.y) {
+                direction = SnakeDirection.TOP;
+            }
+            if (y > this.y) {
+                direction = SnakeDirection.BOTTOM;
+            }
+        }
+        if (m_direction == SnakeDirection.TOP || m_direction == SnakeDirection.BOTTOM) {
+            if(direction==SnakeDirection.TOP ||direction==SnakeDirection.BOTTOM ){
+            }else{
+                m_direction = direction;
+            }
+        } else if (m_direction == SnakeDirection.LEFT || m_direction == SnakeDirection.RIGHT) {
+            if(direction==SnakeDirection.LEFT ||direction==SnakeDirection.RIGHT ){
+            }else{
+                m_direction = direction;
+            }
+        }
+    }
     return true;
+
 }
 }
