@@ -63,8 +63,6 @@ public class GameView extends SurfaceView implements Runnable {
     private int block_high;
     private int x;
     private int y;
-    //The constructor of the GameView, which defines the layout size. Also, the game start when the
-    //constructor is called.
     private boolean firstTouch = false;
     private boolean isPause = false;
     private int surprise_food_1_x = 0;
@@ -80,7 +78,8 @@ public class GameView extends SurfaceView implements Runnable {
     private boolean surprise_food_3 = true;
     private boolean surprise_food_4 = true;
 
-
+    //The constructor of the GameView, which defines the layout size. Also, the game start when the
+    //constructor is called.
     public GameView(Context context, Point size) {
         super(context);
         m_context = context;
@@ -155,6 +154,8 @@ public class GameView extends SurfaceView implements Runnable {
         food_x = random.nextInt(block_wide - 1) + 1;
         food_y = random.nextInt(block_high - 1) + 1;
     }
+
+    //Initialize the surprise food in the corner.
     public void surprise_food(){
 
             surprise_food_1_x = 0;
@@ -217,7 +218,7 @@ public class GameView extends SurfaceView implements Runnable {
  private void eat_surprise(){
      m_score += 10;
  }
-
+//This function moves the snake during the game.
     private void moveSnake(){
         for(int i = snake_length; i > 0; i--){
             snake_x[i] = snake_x[i - 1];
@@ -273,7 +274,7 @@ public class GameView extends SurfaceView implements Runnable {
         return dead;
     }
 
-//This function updates the game when the snake eats the food, special food or dies.
+//This function updates the game when the snake eats the food, special food, surprise food or dies.
 public void updateGame(){
     if(snake_x[0]==food_x&&snake_y[0]==food_y){
         eatFood();
@@ -314,7 +315,7 @@ public void drawGame(){
         obstacle_paint.setColor(Color.argb(255,255,120,120));
         special_food_paint.setColor(Color.argb(255,120,120,255));
         m_Paint.setTextSize(30);
-        canvas.drawText("Score: "+m_score,10,30,m_Paint);
+        canvas.drawText("Score: "+m_score,screen_width/2,30,m_Paint);
         // snake drawing
         for (int i = 0; i < snake_length; i++) {
             canvas.drawRect(snake_x[i] * block_size,
@@ -323,7 +324,7 @@ public void drawGame(){
                     (snake_y[i] * block_size) + block_size,
                     m_Paint);
         }
-        //food and special food
+        //draw the surprise food when the score is more than 10
         if(m_score>=6) {
             if (surprise_food_1)
                 canvas.drawRect(surprise_food_1_x * block_size, (surprise_food_1_y * block_size), (surprise_food_1_x * block_size) + block_size, (surprise_food_1_y * block_size) + block_size, surprise_paint);
@@ -334,7 +335,7 @@ public void drawGame(){
             if (surprise_food_4)
                 canvas.drawRect(surprise_food_4_x * block_size, (surprise_food_4_y * block_size), (surprise_food_4_x * block_size) + block_size, (surprise_food_4_y * block_size) + block_size, surprise_paint);
         }
-        //food
+        //food and special food
         if (normal_count!=reference_count)
             canvas.drawRect(food_x*block_size,(food_y*block_size),(food_x*block_size)+block_size,(food_y*block_size)+block_size,m_Paint);
         else{
@@ -357,7 +358,6 @@ public boolean checkForUpdate(){
     return false;
 }
 //This function defines the onTouchEvent, the snake will move the direction that the user slides into.
-
 // using swipe to control  the snake
 public boolean onTouchEvent(MotionEvent motionEvent){
             int action = motionEvent.getAction()  & MotionEvent.ACTION_MASK;
@@ -398,45 +398,8 @@ public boolean onTouchEvent(MotionEvent motionEvent){
                     }
                 }
             }
+            return true;
 
-
-    int action = motionEvent.getAction()  & MotionEvent.ACTION_MASK;
-    if (action == MotionEvent.ACTION_DOWN) {
-        x = (int) (motionEvent.getX());
-        y = (int) (motionEvent.getY());
-    }
-    if (action== MotionEvent.ACTION_UP) {
-        int x = (int) (motionEvent.getX());
-        int y = (int) (motionEvent.getY());
-        SnakeDirection direction = null;
-        if (Math.abs(x - this.x) > Math.abs(y - this.y)) {
-            if (x > this.x) {
-                direction = SnakeDirection.RIGHT;
-            }
-            if (x < this.x) {
-                direction = SnakeDirection.LEFT;
-            }
-        }else{
-            if (y < this.y) {
-                direction = SnakeDirection.TOP;
-            }
-            if (y > this.y) {
-                direction = SnakeDirection.BOTTOM;
-            }
-        }
-        if (m_direction == SnakeDirection.TOP || m_direction == SnakeDirection.BOTTOM) {
-            if(direction==SnakeDirection.TOP ||direction==SnakeDirection.BOTTOM ){
-            }else{
-                m_direction = direction;
-            }
-        } else if (m_direction == SnakeDirection.LEFT || m_direction == SnakeDirection.RIGHT) {
-            if(direction==SnakeDirection.LEFT ||direction==SnakeDirection.RIGHT ){
-            }else{
-                m_direction = direction;
-            }
-        }
-    }
-    return true;
 
 }
 }
