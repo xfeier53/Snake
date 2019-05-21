@@ -3,9 +3,9 @@ import java.sql.*;
 
 public class Login {	
 
-    public boolean userLogin(String userID, String password){
+    public boolean userLogin(String account, String password){
         boolean isLoginSuccessful = false;
-        String query = "SELECT * FROM AndroidUser WHERE UserID = '" + userID + "' and Password = '" + password + "'";
+        String query = "SELECT * FROM AndroidUser WHERE Account = '" + account + "' and Password = '" + password + "'";
         try{
             Class.forName(CONSTANTS.DRIVER);
             Connection conn = DriverManager.getConnection(CONSTANTS.URL, CONSTANTS.USER, CONSTANTS.PASSWORD);

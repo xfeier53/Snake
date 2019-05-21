@@ -13,11 +13,11 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button login, register;
-    private EditText id, password;
+    private EditText account, password;
     private final static int LOGIN_VALIDATION = 1;
     private int RequestCode = 1;
 
-
+    private Button test;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,15 +27,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         login.setOnClickListener(this);
         register = findViewById(R.id.register);
         register.setOnClickListener(this);
-        id = findViewById(R.id.id);
+        account = findViewById(R.id.account);
         password = findViewById(R.id.password);
+
+        test = findViewById(R.id.test);
+        test.setOnClickListener(this);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == 2) {
-            id.setText(data.getStringExtra("id"));
+            account.setText(data.getStringExtra("account"));
             password.setText(data.getStringExtra("password"));
         }
     }
@@ -51,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     try {
                         if (result.equals("success")) {
                             Toast.makeText(MainActivity.this, "Login Successfully！", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Fail！", Toast.LENGTH_SHORT).show();
                         }
                     } catch (NullPointerException e) {
                         e.printStackTrace();
@@ -69,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         // Using HTTP Connection to send request and process the respond
-                        String result = HTTPConnection.LoginByPost(id.getText().toString(), password.getText().toString());
+                        String result = HTTPConnection.LoginByPost(account.getText().toString(), password.getText().toString());
                         Bundle bundle = new Bundle();
                         bundle.putString("result", result);
                         Message message = new Message();
@@ -84,6 +89,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // Turn to the register page
                 Intent intent = new Intent(this, RegisterActivity.class);
                 startActivityForResult(intent, RequestCode);
+            }
+            break;
+            case R.id.test: {
+                Intent intent = new Intent(MainActivity.this, RankActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("account", "Feier");
+                bundle.putInt("score", 100);
+                intent.putExtra("data", bundle);
+                startActivity(intent);
             }
             break;
         }

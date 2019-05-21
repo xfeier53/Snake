@@ -7,9 +7,9 @@ import java.sql.Statement;
 
 public class Register {
 	
-	public boolean userRegister(String userID, String password, String email){
+	public boolean userRegister(String account, String password, String email){
         boolean isRegisterSuccessful = false;
-        String sql = "SELECT * FROM AndroidUser WHERE UserID = '" + userID + "'";
+        String sql = "SELECT * FROM AndroidUser WHERE Account = '" + account + "'";
  
         try{
             Class.forName(CONSTANTS.DRIVER);
@@ -18,7 +18,7 @@ public class Register {
             ResultSet rs = stm.executeQuery(sql);
  
             if(!rs.next()){
-                sql = "INSERT INTO AndroidUser (UserID, Password, Email) VALUES ('" + userID + "','" + password + "','" + email + "')";
+                sql = "INSERT INTO AndroidUser (Account, Password, Email) VALUES ('" + account + "','" + password + "','" + email + "')";
                 stm.execute(sql);
                 isRegisterSuccessful = true;
             }
