@@ -253,6 +253,7 @@ public void updateGame(){
     moveSnake();
     if(detectDeath()){
         startGame();
+        normal_count = 0;
     }
 }
 //This is the function which draw the entire game layout, snake, food, special food and obstacle.
@@ -300,17 +301,17 @@ public boolean onTouchEvent(MotionEvent motionEvent){
             int action = motionEvent.getAction()  & MotionEvent.ACTION_MASK;
 
            if (action == MotionEvent.ACTION_DOWN) {
-               long time= System.currentTimeMillis();
-                if(firstTouch &&(System.currentTimeMillis() - time) <= 500){
-                    firstTouch = false;
-                    Log.d("1111",m_Playing +"");
-                    isPause = !isPause;
-                }else{
-                    firstTouch = true;
-                    time = System.currentTimeMillis();
+//               long time= System.currentTimeMillis();
+//                if(firstTouch &&(System.currentTimeMillis() - time) <= 500){
+//                    firstTouch = false;
+//                    Log.d("1111",m_Playing +"");
+//                    isPause = !isPause;
+//                }else{
+//                    firstTouch = true;
+//                    time = System.currentTimeMillis();
                     x = (int) (motionEvent.getX());
                     y = (int) (motionEvent.getY());
-               }
+//               }
            }
             if (action== MotionEvent.ACTION_UP) {
                 int x = (int) (motionEvent.getX());
