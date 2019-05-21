@@ -10,7 +10,6 @@ import android.graphics.Point;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -21,8 +20,6 @@ import java.util.Random;
 import java.util.List;
 
 public class GameView extends SurfaceView implements Runnable {
-//    private GestureDetector myGestureDetector;
-//    private MyGestureListener myGestureListener;
     private Thread m_Thread = null;
     private volatile boolean m_Playing;
     private Canvas canvas;
@@ -70,9 +67,6 @@ public class GameView extends SurfaceView implements Runnable {
         snake_x = new int[200];
         snake_y = new int[200];
 
-
-        //myGestureListener = new MyGestureListener();
-//        myGestureDetector = new GestureDetector(this, myGestureListener);
 
         // Start the game
         startGame();
@@ -275,7 +269,6 @@ public boolean checkForUpdate(){
 
 public boolean onTouchEvent(MotionEvent motionEvent){
     int action = motionEvent.getAction()  & MotionEvent.ACTION_MASK;
-
     if (action == MotionEvent.ACTION_DOWN) {
         x = (int) (motionEvent.getX());
         y = (int) (motionEvent.getY());
@@ -311,7 +304,6 @@ public boolean onTouchEvent(MotionEvent motionEvent){
             }
         }
     }
-
     return true;
 }
 }
