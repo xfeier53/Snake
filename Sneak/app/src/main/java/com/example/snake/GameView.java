@@ -272,48 +272,41 @@ public boolean checkForUpdate(){
     return false;
 }
 
+// using swipe to control  the snake
 public boolean onTouchEvent(MotionEvent motionEvent){
             int action = motionEvent.getAction()  & MotionEvent.ACTION_MASK;
-
            if (action == MotionEvent.ACTION_DOWN) {
-               long time= System.currentTimeMillis();
-                if(firstTouch &&(System.currentTimeMillis() - time) <= 500){
-                    firstTouch = false;
-                    Log.d("1111",m_Playing +"");
-                    isPause = !isPause;
-                }else{
-                    firstTouch = true;
-                    time = System.currentTimeMillis();
                     x = (int) (motionEvent.getX());
                     y = (int) (motionEvent.getY());
-               }
            }
             if (action== MotionEvent.ACTION_UP) {
                 int x = (int) (motionEvent.getX());
                 int y = (int) (motionEvent.getY());
                 SnakeDirection direction = SnakeDirection.RIGHT;
                 if (Math.abs(x - this.x) > Math.abs(y - this.y)) {
-                    if (x - this.x > 100) {
+                    if (x > this.x) {
                         direction = SnakeDirection.RIGHT;
                     }
-                    if (x - this.x < -100) {
+                    if (x < this.x) {
                         direction = SnakeDirection.LEFT;
                     }
                 }else{
-                    if (y - this.y < -100) {
+                    if (y < this.y) {
                         direction = SnakeDirection.TOP;
                     }
-                    if (y - this.y > 100) {
+                    if (y > this.y) {
                         direction = SnakeDirection.BOTTOM;
                     }
                 }
                 if (m_direction == SnakeDirection.TOP || m_direction == SnakeDirection.BOTTOM) {
                     if(direction==SnakeDirection.TOP ||direction==SnakeDirection.BOTTOM ){
+                        // if current direction is up and down, do nothing;
                     }else{
                         m_direction = direction;
                     }
                 } else if (m_direction == SnakeDirection.LEFT || m_direction == SnakeDirection.RIGHT) {
                     if(direction==SnakeDirection.LEFT ||direction==SnakeDirection.RIGHT ){
+                        // if current direction is left and right, do nothing;
                     }else{
                         m_direction = direction;
                     }
