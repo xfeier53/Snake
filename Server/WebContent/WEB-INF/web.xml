@@ -23,4 +23,13 @@
         <servlet-name>Register</servlet-name>
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>GetBestScore</servlet-name>
+        <servlet-class>com.anu.GetBestScoreServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetBestScore</servlet-name>
+        <url-pattern>/getBestScore</url-pattern>
+    </servlet-mapping>
 </web-app>
