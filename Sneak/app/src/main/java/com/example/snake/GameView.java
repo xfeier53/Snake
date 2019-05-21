@@ -41,6 +41,13 @@ public class GameView extends SurfaceView implements Runnable {
     private int snake_length;
     private int food_x;
     private int food_y;
+    private int obstacle_x;
+    private int obstacle_y;
+    private int normal_count = 0;
+    private int special_food_x;
+    private int special_food_y;
+    private int reference_count = 5;
+    private Paint special_food_paint = new Paint();
     private int block_size;
     private final int block_wide = 40;
     private int block_high;
@@ -103,8 +110,15 @@ public class GameView extends SurfaceView implements Runnable {
         snake_x[0] = block_wide / 2;
         snake_y[0] = block_high / 2;
 
+
         // Add a mouse to eat
         spawnFood();
+
+
+        special_food();
+
+        // Add an obstacle
+        spawnObstacle();
 
         // initial socre to 0
         m_score= 0;
@@ -119,15 +133,41 @@ public class GameView extends SurfaceView implements Runnable {
         food_y = random.nextInt(block_high - 1) + 1;
     }
 
+    public void spawnObstacle() {
+        Random random = new Random();
+        obstacle_x = random.nextInt(block_wide - 3) + 1;
+        obstacle_y = random.nextInt(block_high - 6) + 1;
+        while(food_x>=obstacle_x && food_x<=obstacle_x+2 && food_y>=obstacle_y && food_y<=obstacle_y+5){
+            spawnObstacle();
+        }
+    }
+
+    public void special_food(){
+        Random random = new Random();
+        special_food_x = random.nextInt(block_wide - 1) + 1;
+        special_food_y = random.nextInt(block_high - 1) + 1;
+    }
+
     private void eatFood(){
         // increase the length of snake after eating food
+        normal_count++;
         snake_length++;
 
         // add another food
         spawnFood();
 
+        // add another obstacle
+        spawnObstacle();
+
         // update score
         m_score++;
+    }
+
+    private void eat_special_Food(){
+        snake_length += 5;
+        m_score += 5;
+        special_food();
+        normal_count=0;
     }
 
 
@@ -177,6 +217,10 @@ public class GameView extends SurfaceView implements Runnable {
                 dead = true;
             }
         }
+
+        if (snake_x[0]>=obstacle_x && snake_x[0]<=obstacle_x+1 && snake_y[0]>=obstacle_y && snake_y[0]<=obstacle_y+4){
+            dead = true;
+        }
         return dead;
     }
 
@@ -184,6 +228,9 @@ public class GameView extends SurfaceView implements Runnable {
 public void updateGame(){
     if(snake_x[0]==food_x&&snake_y[0]==food_y){
         eatFood();
+    }
+    if(snake_x[0]==special_food_x&&snake_y[0]==special_food_y){
+        eat_special_Food();
     }
     moveSnake();
     if(detectDeath()){
@@ -195,6 +242,7 @@ public void drawGame(){
         canvas = m_Holder.lockCanvas();
         canvas.drawColor(Color.argb(255,120,197,87));
         m_Paint.setColor(Color.argb(255, 255, 255, 255));
+        special_food_paint.setColor(Color.argb(255,120,120,255));
         m_Paint.setTextSize(30);
         canvas.drawText("Score: "+m_score,10,30,m_Paint);
         // snake drawing
@@ -206,7 +254,12 @@ public void drawGame(){
                     m_Paint);
         }
         //food
-        canvas.drawRect(food_x*block_size,(food_y*block_size),(food_x*block_size)+block_size,(food_y*block_size)+block_size,m_Paint);
+        if (normal_count!=reference_count)
+            canvas.drawRect(food_x*block_size,(food_y*block_size),(food_x*block_size)+block_size,(food_y*block_size)+block_size,m_Paint);
+        else{
+            canvas.drawRect(special_food_x*block_size,(special_food_y*block_size),(special_food_x*block_size)+block_size,(special_food_y*block_size)+block_size,special_food_paint);
+        }
+        canvas.drawRect(obstacle_x*block_size,(obstacle_y*block_size),(obstacle_x*block_size)+block_size*2,(obstacle_y*block_size)+block_size*5,m_Paint);
         //draw
         m_Holder.unlockCanvasAndPost(canvas);
     }
