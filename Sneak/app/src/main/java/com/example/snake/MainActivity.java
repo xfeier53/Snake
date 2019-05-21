@@ -8,20 +8,22 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
-
+/*
+Authorship: Yu Wang
+            Tao Xu
+            Yue Zhou
+ */
 public class MainActivity extends Activity {
     private GameView gameView;
+    //This method loads the GameView, and get the screen size of the phone or tablet.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         gameView = new GameView(this,size);
         setContentView(gameView);
-//        sendControlMessage();
-
     }
     @Override
     protected void onResume(){
