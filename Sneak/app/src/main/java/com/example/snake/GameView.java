@@ -10,6 +10,7 @@ import android.graphics.Point;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -20,6 +21,8 @@ import java.util.Random;
 import java.util.List;
 
 public class GameView extends SurfaceView implements Runnable {
+//    private GestureDetector myGestureDetector;
+//    private MyGestureListener myGestureListener;
     private Thread m_Thread = null;
     private volatile boolean m_Playing;
     private Canvas canvas;
@@ -30,7 +33,7 @@ public class GameView extends SurfaceView implements Runnable {
     private int screen_width;
     private int screen_height;
     private long m_NextFrameTime;
-    private final long FPS = 10;
+    private final long FPS = 5;
     private final long milli_second = 1000;
     private int m_score;
     private int[] snake_x;
@@ -41,6 +44,8 @@ public class GameView extends SurfaceView implements Runnable {
     private int block_size;
     private final int block_wide = 40;
     private int block_high;
+    private int x;
+    private int y;
 
     public GameView(Context context, Point size) {
         super(context);
@@ -58,63 +63,14 @@ public class GameView extends SurfaceView implements Runnable {
         snake_x = new int[200];
         snake_y = new int[200];
 
+
+        //myGestureListener = new MyGestureListener();
+//        myGestureDetector = new GestureDetector(this, myGestureListener);
+
         // Start the game
         startGame();
     }
 
-    //    private Paint paint = new Paint();
-//    private Background background = new Background();
-//    private Snake snake = new Snake();
-//    public GameView(Context context) {
-//        super(context);
-//        initialize();
-//    }
-//
-//    private void initialize(){
-//        Position position = new Position(background.getGridSize()/2,background.getGridSize()/2);
-//        snake.getSnake().add(position);
-//
-//
-//    }
-//
-//    protected void onDraw(Canvas canvas) {
-//        if (background != null) {
-//            paint.setColor(Color.RED);
-//            drawGrid(canvas);
-//        }
-//        if (snake != null) {
-//            paint.setColor(Color.GREEN);
-//            drawSnake(canvas);
-//        }
-//    }
-//    private void drawSnake(Canvas canvas){
-//        List<Position> snakePosition = snake.getSnake();
-//        for (Position p:snakePosition){
-//            int startX = background.getOffset() + background.getGridWidth()*p.getX();
-//            int stopX = startX + background.getGridWidth();
-//            int startY = background.getOffset() + background.getGridWidth() * p.getY();
-//            int stopY = startY + +background.getGridWidth();
-//            canvas.drawRect(startX, startY, stopX, stopY, paint);
-//        }
-//    }
-//    private void drawGrid(Canvas canvas) {
-//        for (int i = 0; i <= background.getGridSize(); i++) {
-//            int startX = background.getOffset() + background.getGridWidth() * i;
-//            int stopX = startX;
-//            int startY = background.getOffset();//+gridBean.getGridWidth() * i
-//            int stopY = startY + background.getLineLength();//
-//            canvas.drawLine(startX, startY, stopX, stopY, paint); }
-//        for (int i = 0; i <= background.getGridSize(); i++) {
-//            int startX = background.getOffset();//+gridBean.getGridWidth() * i
-//            int stopX = startX + background.getLineLength();
-//
-//            int startY = background.getOffset() + background.getGridWidth() * i;
-//            int stopY = startY; canvas.drawLine(startX, startY, stopX, stopY, paint);
-//        }
-//    }
-//    private void drawFood(Canvas canvas){
-//        Food food = new Food();
-//    }
     @Override
     public void run(){
         while(m_Playing){
@@ -263,43 +219,46 @@ public boolean checkForUpdate(){
     }
     return false;
 }
-public boolean onTouchEvent(MotionEvent motionEvent){
-    switch(motionEvent.getAction()&MotionEvent.ACTION_MASK){
-        case MotionEvent.ACTION_UP:
-            if(motionEvent.getX()>=screen_width/2){
-                switch (m_direction){
-                    case TOP:
-                        m_direction = SnakeDirection.RIGHT;
-                        break;
-                    case LEFT:
-                        m_direction = SnakeDirection.TOP;
-                        break;
-                    case RIGHT:
-                        m_direction = SnakeDirection.BOTTOM;
-                        break;
-                    case BOTTOM:
-                        m_direction = SnakeDirection.LEFT;
-                        break;
-                }
-            }
-            else{
-                switch (m_direction){
-                    case TOP:
-                        m_direction = SnakeDirection.LEFT;
-                        break;
-                    case LEFT:
-                        m_direction = SnakeDirection.BOTTOM;
-                        break;
-                    case RIGHT:
-                        m_direction = SnakeDirection.TOP;
-                        break;
-                    case BOTTOM:
-                        m_direction = SnakeDirection.RIGHT;
-                        break;
-                }
-            }
 
+public boolean onTouchEvent(MotionEvent motionEvent){
+    int action = motionEvent.getAction()  & MotionEvent.ACTION_MASK;
+
+    if (action == MotionEvent.ACTION_DOWN) {
+        x = (int) (motionEvent.getX());
+        y = (int) (motionEvent.getY());
     }
+    if (action== MotionEvent.ACTION_UP) {
+        int x = (int) (motionEvent.getX());
+        int y = (int) (motionEvent.getY());
+        SnakeDirection direction = null;
+        if (Math.abs(x - this.x) > Math.abs(y - this.y)) {
+            if (x > this.x) {
+                direction = SnakeDirection.RIGHT;
+            }
+            if (x < this.x) {
+                direction = SnakeDirection.LEFT;
+            }
+        }else{
+            if (y < this.y) {
+                direction = SnakeDirection.TOP;
+            }
+            if (y > this.y) {
+                direction = SnakeDirection.BOTTOM;
+            }
+        }
+        if (m_direction == SnakeDirection.TOP || m_direction == SnakeDirection.BOTTOM) {
+            if(direction==SnakeDirection.TOP ||direction==SnakeDirection.BOTTOM ){
+            }else{
+                m_direction = direction;
+            }
+        } else if (m_direction == SnakeDirection.LEFT || m_direction == SnakeDirection.RIGHT) {
+            if(direction==SnakeDirection.LEFT ||direction==SnakeDirection.RIGHT ){
+            }else{
+                m_direction = direction;
+            }
+        }
+    }
+
     return true;
 }
 }
