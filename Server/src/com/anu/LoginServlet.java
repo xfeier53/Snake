@@ -12,12 +12,12 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
         response.setCharacterEncoding("UTF-8");
-        String userID = request.getParameter("userID");
+        String account = request.getParameter("account");
         String password = request.getParameter("password");
                 
         String result;
         Login login = new Login();        
-        boolean isLoginSuccessful = login.userLogin(userID, password);
+        boolean isLoginSuccessful = login.userLogin(account, password);
         PrintWriter out = response.getWriter();
         if(isLoginSuccessful){
             result = "success";

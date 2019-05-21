@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final static int LOGIN_VALIDATION = 1;
     private int RequestCode = 1;
 
-
+    private Button test;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +29,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         register.setOnClickListener(this);
         account = findViewById(R.id.account);
         password = findViewById(R.id.password);
+
+        test = findViewById(R.id.test);
+        test.setOnClickListener(this);
     }
 
     @Override
@@ -86,6 +89,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // Turn to the register page
                 Intent intent = new Intent(this, RegisterActivity.class);
                 startActivityForResult(intent, RequestCode);
+            }
+            break;
+            case R.id.test: {
+                Intent intent = new Intent(MainActivity.this, RankActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("account", "Feier");
+                bundle.putInt("score", 100);
+                intent.putExtra("data", bundle);
+                startActivity(intent);
             }
             break;
         }
