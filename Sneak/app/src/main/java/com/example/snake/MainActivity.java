@@ -1,5 +1,6 @@
 package com.example.snake;
 
+import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +9,7 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
     private GameView gameView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
