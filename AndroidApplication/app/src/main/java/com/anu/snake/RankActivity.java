@@ -147,24 +147,8 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
     };
 
     public void getData() {
-        if (myThisScore > myBestScore) {
-            // A thread to set the user's best score
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    String result = HTTPConnection.setBestScoreByPost(account, myThisScore);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("result", result);
-                    Message msg = new Message();
-                    msg.what = CONSTANTS.NEW_SCORE_PROCESS;
-                    msg.setData(bundle);
-                    handler.sendMessage(msg);
-                }
-            }).start();
-        }
-
         // A thread to retrieve the user's best score
-        new Thread(new Runnable() {
+        Thread t1 = new Thread(new Runnable() {
             @Override
             public void run() {
                 int result = HTTPConnection.getBestScoreByPost(account);
@@ -175,10 +159,10 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
                 msg.setData(bundle);
                 handler.sendMessage(msg);
             }
-        }).start();
+        });
 
         // A thread to retrieve the world records
-        new Thread(new Runnable() {
+        Thread t2 = new Thread(new Runnable() {
             @Override
             public void run() {
                 String result = HTTPConnection.getRecord();
@@ -189,7 +173,33 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
                 msg.setData(bundle);
                 handler.sendMessage(msg);
             }
-        }).start();
+        });
+
+        // A thread to set the user's best score
+        Thread t3 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String result = HTTPConnection.setBestScoreByPost(account, myThisScore);
+                Bundle bundle = new Bundle();
+                bundle.putString("result", result);
+                Message msg = new Message();
+                msg.what = CONSTANTS.NEW_SCORE_PROCESS;
+                msg.setData(bundle);
+                handler.sendMessage(msg);
+            }
+        });
+        try {
+            t1.start();
+            t1.join();
+            t2.start();
+            t2.join();
+            if (myThisScore > myBestScore) {
+                t3.start();
+                t3.join();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setRecord() {
