@@ -20,14 +20,24 @@
         android:textSize="30sp"
         android:textStyle="bold"/>
 
+    <Button
+        android:id="@+id/howToPlay"
+        android:text="How To Play??"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/title"/>
+
     <EditText
         android:id="@+id/account"
         android:textColor="@color/colorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
+        android:layout_below="@+id/howToPlay"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="30dp"
         android:ems="10"
         android:hint="Account"
         android:inputType="text" />

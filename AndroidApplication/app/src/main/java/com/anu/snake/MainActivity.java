@@ -1,5 +1,6 @@
 package com.anu.snake;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +13,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button login, register;
+    private Button login, register, howToPlay;
     private EditText account, password;
 
     private Button test;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         login.setOnClickListener(this);
         register = findViewById(R.id.register);
         register.setOnClickListener(this);
+        howToPlay = findViewById(R.id.howToPlay);
+        howToPlay.setOnClickListener(this);
         account = findViewById(R.id.account);
         password = findViewById(R.id.password);
 
@@ -109,6 +112,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 bundle.putInt("score", 100);
                 intent.putExtra("data", bundle);
                 startActivity(intent);
+            }
+            break;
+
+            case R.id.howToPlay: {
+                // Pop up a dialog to show the rule of the game
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("How To Play??");
+                builder.setMessage("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                // Positive button, need no action
+                builder.setPositiveButton("OK", null);
+                // Can not be cancel
+                builder.setCancelable(false);
+                builder.show();
             }
             break;
         }
