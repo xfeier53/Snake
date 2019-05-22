@@ -6,8 +6,8 @@ Therefore, components used are listed below:
 Apache Tomcat 8.5.39
 MySQL 5.7.25-0ubuntu0.18.04.2
 
-1. Run the SQL code to set up the database, test data is also given.
-2. Run the server, and make sure the port 8080 is not used, or you might need to change the PORT variable in **
+1. Run the SQL (initDB.sql) to set up the database, test data is also given. Change the setting in CONSTANTS interface if needed
+2. Run the server, and make sure the port 8080 is not used, or you might need to change the PORT variable in CONSTANTS interface
 3. Make sure the Android device and server are in the same network, and retrieve the IP address of the server
-4. Change the IPAddress variable in ** to the IP address of the server
+4. Change the IPAddress variable in CONSTANTS interface to the IP address of the server
 5. Run the Android application
