@@ -154,7 +154,7 @@ public class GameView extends SurfaceView implements Runnable {
 
         // initial game speed
         FPS = 5;
-
+        obstacles.clear();
         m_NextFrameTime = System.currentTimeMillis();
     }
 
@@ -168,45 +168,42 @@ public class GameView extends SurfaceView implements Runnable {
     //Initialize the surprise food in the corner.
     public void surprise_food(){
 
-            surprise_food_1_x = 0;
-            surprise_food_1_y = 0;
-            surprise_food_2_x = block_wide - 1;
-            surprise_food_2_y = 0;
-            surprise_food_3_x = 0;
-            surprise_food_3_y = block_high - 1;
-            surprise_food_4_x = block_wide - 1;
-            surprise_food_4_y = block_high - 1;
+            surprise_food_1_x = 100;
+            surprise_food_1_y = 100;
+            surprise_food_2_x = block_wide - 100;
+            surprise_food_2_y = 100;
+            surprise_food_3_x = 100;
+            surprise_food_3_y = block_high - 100;
+            surprise_food_4_x = block_wide - 100;
+            surprise_food_4_y = block_high - 100;
 
     }
 
     //Initial a obstacle
     public void spawnObstacle() {
         Random random = new Random();
-        obstacles.clear();
-//        obstacle_x = random.nextInt(block_wide - 3) + 1;
-//        obstacle_y = random.nextInt(block_high - 6) + 1;
+        //obstacles.clear();
+        obstacle_x = random.nextInt(block_wide - 3) + 1;
+        obstacle_y = random.nextInt(block_high - 6) + 1;
 
-        for(int i = 0; i < obstacleCounts; i++){
-            int[] obstacle = new int[2];
-            obstacle_x = random.nextInt(block_wide - 3) + 1;
-            obstacle_y = random.nextInt(block_high - 6) + 1;
-            obstacle[0] = obstacle_x;
-            obstacle[1] = obstacle_y;
-
-            obstacles.add(obstacle);
-        }
-        Log.d("q1",obstacles.get(0)[0]+"");
-        Log.d("q2",obstacles.get(1)[0]+"");
-
-        for(int[] _obstacle : obstacles){
-            while(food_x>=_obstacle[0] && food_x<=_obstacle[0]+2 && food_y>=_obstacle[1] && food_y<=_obstacle[1]+5){
-                spawnObstacle();
-            }
-        }
-
-//        while(food_x>=obstacle_x && food_x<=obstacle_x+2 && food_y>=obstacle_y && food_y<=obstacle_y+5){
-//            spawnObstacle();
+//        for(int i = 0; i < obstacleCounts; i++){
+//            int[] obstacle = new int[2];
+//            obstacle_x = random.nextInt(block_wide - 3) + 1;
+//            obstacle_y = random.nextInt(block_high - 6) + 1;
+//            obstacle[0] = obstacle_x;
+//            obstacle[1] = obstacle_y;
+//            obstacles.add(obstacle);
 //        }
+
+//        for(int[] _obstacle : obstacles){
+//            while(food_x>=_obstacle[0] && food_x<=_obstacle[0]+2 && food_y>=_obstacle[1] && food_y<=_obstacle[1]+5){
+//                spawnObstacle();
+//            }
+//        }
+
+        while(food_x>=obstacle_x && food_x<=obstacle_x+2 && food_y>=obstacle_y && food_y<=obstacle_y+5){
+            spawnObstacle();
+        }
     }
 
     //Initial a special food/bonus food
@@ -215,12 +212,14 @@ public class GameView extends SurfaceView implements Runnable {
         special_food_x = random.nextInt(block_wide - 1) + 1;
         special_food_y = random.nextInt(block_high - 1) + 1;
 
-        for(int[] obstacle : obstacles){
-            while(food_x>=special_food_x && special_food_x<=food_x+2 && food_y>=special_food_y && special_food_y<=food_y+5&&special_food_x>= obstacle[0]&& special_food_x<=obstacle[0]+2 && special_food_y>=obstacle[1] && special_food_y<=obstacle[1]+5){
-                spawnObstacle();
-            }
+//        for(int[] obstacle : obstacles){
+//            while(food_x>=special_food_x && special_food_x<=food_x+2 && food_y>=special_food_y && special_food_y<=food_y+5&&special_food_x>= obstacle[0]&& special_food_x<=obstacle[0]+2 && special_food_y>=obstacle[1] && special_food_y<=obstacle[1]+5){
+//                spawnObstacle();
+//            }
+//        }
+        while(food_x>=special_food_x && special_food_x<=food_x+2 && food_y>=special_food_y && special_food_y<=food_y+5&&special_food_x>= obstacle_x&& special_food_x<=obstacle_x+2 && special_food_y>=obstacle_y && special_food_y<=obstacle_y+5){
+            special_food();
         }
-
     }
 
     //A method which is called when the snake move into the food (eat the food）
@@ -307,14 +306,14 @@ public class GameView extends SurfaceView implements Runnable {
             }
         }
         //check if hits the wall
-        for(int[] obstacle : obstacles){
-            if (snake_x[0]>=obstacle[0] && snake_x[0]<=obstacle[0]+1 && snake_y[0]>=obstacle[1] && snake_y[0]<=obstacle[1]+4){
-                dead = true;
-            }
-        }
-//        if (snake_x[0]>=obstacle_x && snake_x[0]<=obstacle_x+1 && snake_y[0]>=obstacle_y && snake_y[0]<=obstacle_y+4){
-//            dead = true;
+//        for(int[] obstacle : obstacles){
+//            if (snake_x[0]>=obstacle[0] && snake_x[0]<=obstacle[0]+1 && snake_y[0]>=obstacle[1] && snake_y[0]<=obstacle[1]+4){
+//                dead = true;
+//            }
 //        }
+        if (snake_x[0]>=obstacle_x && snake_x[0]<=obstacle_x+1 && snake_y[0]>=obstacle_y && snake_y[0]<=obstacle_y+4){
+            dead = true;
+        }
         return dead;
     }
 
@@ -367,7 +366,7 @@ public void drawGame(){
                     m_Paint);
         }
         //draw the surprise food when the score is more than 10
-        if(m_score>=6) {
+      //  if(m_score>=6) {
             if (surprise_food_1)
                 canvas.drawRect(surprise_food_1_x * block_size, (surprise_food_1_y * block_size), (surprise_food_1_x * block_size) + block_size, (surprise_food_1_y * block_size) + block_size, surprise_paint);
             if (surprise_food_2)
@@ -376,7 +375,7 @@ public void drawGame(){
                 canvas.drawRect(surprise_food_3_x * block_size, (surprise_food_3_y * block_size), (surprise_food_3_x * block_size) + block_size, (surprise_food_3_y * block_size) + block_size, surprise_paint);
             if (surprise_food_4)
                 canvas.drawRect(surprise_food_4_x * block_size, (surprise_food_4_y * block_size), (surprise_food_4_x * block_size) + block_size, (surprise_food_4_y * block_size) + block_size, surprise_paint);
-        }
+       // }
         //food and special food
         if (normal_count!=reference_count)
             canvas.drawRect(food_x*block_size,(food_y*block_size),(food_x*block_size)+block_size,(food_y*block_size)+block_size,m_Paint);
@@ -384,10 +383,10 @@ public void drawGame(){
             canvas.drawRect(special_food_x*block_size,(special_food_y*block_size),(special_food_x*block_size)+block_size,(special_food_y*block_size)+block_size,special_food_paint);
         }
         //obstacle
-        for(int[] obstacle : obstacles){
-            canvas.drawRect(obstacle[0]*block_size,(obstacle[1]*block_size),(obstacle[0]*block_size)+block_size*2,(obstacle[1]*block_size)+block_size*5,obstacle_paint);
-        }
-       // canvas.drawRect(obstacle_x*block_size,(obstacle_y*block_size),(obstacle_x*block_size)+block_size*2,(obstacle_y*block_size)+block_size*5,obstacle_paint);
+//        for(int[] obstacle : obstacles){
+//            canvas.drawRect(obstacle[0]*block_size,(obstacle[1]*block_size),(obstacle[0]*block_size)+block_size*2,(obstacle[1]*block_size)+block_size*5,obstacle_paint);
+//        }
+         canvas.drawRect(obstacle_x*block_size,(obstacle_y*block_size),(obstacle_x*block_size)+block_size*2,(obstacle_y*block_size)+block_size*5,obstacle_paint);
         //draw
         m_Holder.unlockCanvasAndPost(canvas);
     }
