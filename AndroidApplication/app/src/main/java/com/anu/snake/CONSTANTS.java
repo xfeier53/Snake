@@ -3,8 +3,11 @@ package com.anu.snake;
 import java.util.regex.Pattern;
 
 public interface CONSTANTS {
+    // Setting for Server Port and the IP of the Server
     public static final String PORT = "8080";
     public static final String IP = "172.20.10.5";
+
+    // The message code for the activity
     public static final int LOGIN_VALIDATION = 1;
     public static final int REGISTER_VALIDATION = 2;
     public static final int MAIN_REQUEST_REGISTER = 3;
