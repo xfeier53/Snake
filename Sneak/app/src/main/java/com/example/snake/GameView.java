@@ -68,14 +68,14 @@ public class GameView extends SurfaceView implements Runnable {
     private int y;
     private boolean firstTouch = false;
     private boolean isPause = false;
-    private int surprise_food_1_x =1;
-    private int surprise_food_1_y = 1;
-    private int surprise_food_2_x = block_wide-2;
-    private int surprise_food_2_y = 1;
-    private int surprise_food_3_x = 1;
-    private int surprise_food_3_y = block_high-2;
-    private int surprise_food_4_x = block_wide-2;
-    private int surprise_food_4_y = block_high-2;
+    private int surprise_food_1_x;
+    private int surprise_food_1_y;
+    private int surprise_food_2_x;
+    private int surprise_food_2_y;
+    private int surprise_food_3_x;
+    private int surprise_food_3_y;
+    private int surprise_food_4_x;
+    private int surprise_food_4_y;
     private boolean surprise_food_1 = true;
     private boolean surprise_food_2 = true;
     private boolean surprise_food_3 = true;
@@ -157,6 +157,7 @@ public class GameView extends SurfaceView implements Runnable {
         FPS = 5;
         obstacles.clear();
         m_NextFrameTime = System.currentTimeMillis();
+
     }
 
     // Initial a food
@@ -164,6 +165,9 @@ public class GameView extends SurfaceView implements Runnable {
         Random random = new Random();
         food_x = random.nextInt(block_wide - 1) + 1;
         food_y = random.nextInt(block_high - 1) + 1;
+        while((food_x==1&&food_y==1)||(food_x==block_wide-2&&food_y==1)||(food_x==1 && food_y==block_high - 2) || (food_x==block_wide - 2 && food_y==block_high-2)){
+            spawnFood();
+        }
     }
 
     //Initialize the surprise food in the corner.
@@ -218,7 +222,7 @@ public class GameView extends SurfaceView implements Runnable {
 //                spawnObstacle();
 //            }
 //        }
-        while(food_x>=special_food_x && special_food_x<=food_x+2 && food_y>=special_food_y && special_food_y<=food_y+5&&special_food_x>= obstacle_x&& special_food_x<=obstacle_x+2 && special_food_y>=obstacle_y && special_food_y<=obstacle_y+5){
+        while((food_x>=special_food_x && special_food_x<=food_x+2 && food_y>=special_food_y && special_food_y<=food_y+5) || (special_food_x>= obstacle_x&& special_food_x<=obstacle_x+2 && special_food_y>=obstacle_y && special_food_y<=obstacle_y+5)){
             special_food();
         }
     }
@@ -231,9 +235,7 @@ public class GameView extends SurfaceView implements Runnable {
         snake_length++;
         // add another food
         spawnFood();
-        if(m_score>=6) {
-            surprise_food();
-        }
+
         // add another obstacle
         spawnObstacle();
 
@@ -327,19 +329,19 @@ public void updateGame(){
     if(snake_x[0]==special_food_x&&snake_y[0]==special_food_y){
         eat_special_Food();
     }
-    if(snake_x[0]==surprise_food_1_x&&snake_y[0]==surprise_food_1_y){
+    if(snake_x[0]==surprise_food_1_x&&snake_y[0]==surprise_food_1_y&&surprise_food_1){
         eat_surprise();
         surprise_food_1 = false;
     }
-    if(snake_x[0]==surprise_food_2_x&&snake_y[0]==surprise_food_2_y){
+    if(snake_x[0]==surprise_food_2_x&&snake_y[0]==surprise_food_2_y&&surprise_food_2){
         eat_surprise();
         surprise_food_2 = false;
     }
-    if(snake_x[0]==surprise_food_3_x&&snake_y[0]==surprise_food_3_y){
+    if(snake_x[0]==surprise_food_3_x&&snake_y[0]==surprise_food_3_y&&surprise_food_3){
         eat_surprise();
         surprise_food_3 = false;
     }
-    if(snake_x[0]==surprise_food_4_x&&snake_y[0]==surprise_food_4_y){
+    if(snake_x[0]==surprise_food_4_x&&snake_y[0]==surprise_food_4_y&&surprise_food_4){
         eat_surprise();
         surprise_food_4 = false;
     }
@@ -368,7 +370,10 @@ public void drawGame(){
                     m_Paint);
         }
         //draw the surprise food when the score is more than 10
-      if(m_score>=6) {
+        if(m_score==10) {
+            surprise_food();
+        }
+        if(m_score>=10) {
             if (surprise_food_1)
                 canvas.drawRect(surprise_food_1_x * block_size, (surprise_food_1_y * block_size), (surprise_food_1_x * block_size) + block_size, (surprise_food_1_y * block_size) + block_size, surprise_paint);
             if (surprise_food_2)
