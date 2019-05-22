@@ -5,14 +5,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -90,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            String result = HTTPConnection.RegisterByPost(account.getText().toString(), pass_1.getText().toString(), email.getText().toString());
+                            String result = HTTPConnection.registerByPost(account.getText().toString(), pass_1.getText().toString(), email.getText().toString());
                             Bundle bundle = new Bundle();
                             bundle.putString("result", result);
                             Message msg = new Message();

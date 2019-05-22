@@ -39,7 +39,7 @@ public class HTTPConnection {
     }
 
     // Send request to login servlet, to retrieve the user profile for validation
-    public static String LoginByPost(String account, String password) {
+    public static String loginByPost(String account, String password) {
         String result = "";
         String address = "http://" + CONSTANTS.IP + ":" + CONSTANTS.PORT + "/AndroidServer/login";
         try {
@@ -59,7 +59,7 @@ public class HTTPConnection {
     }
 
     // Send request to register servlet and add user into databse
-    public static String RegisterByPost(String account, String password, String email) {
+    public static String registerByPost(String account, String password, String email) {
         String address = "http://" + CONSTANTS.IP + ":" + CONSTANTS.PORT + "/AndroidServer/register";
         String result = "";
         try {
@@ -79,7 +79,7 @@ public class HTTPConnection {
     }
 
     // Send request to GetBestScoreServlet servlet to retrieve user's best score
-    public static int GetBestScoreByPost(String account) {
+    public static int getBestScoreByPost(String account) {
         String address = "http://" + CONSTANTS.IP + ":" + CONSTANTS.PORT + "/AndroidServer/getBestScore";
         String result = "";
         int score = 0;
@@ -99,11 +99,47 @@ public class HTTPConnection {
     }
 
     // Send request to RecordServlet to retrieve world record
-    public static String GetRecord() {
+    public static String getRecord() {
         String address = "http://" + CONSTANTS.IP + ":" + CONSTANTS.PORT + "/AndroidServer/getRecord";
         String result = "";
         try {
             HttpURLConnection conn = init(address, "");
+            if (conn.getResponseCode() == 200) {
+                // Get input stream and read by byte
+                InputStream is = conn.getInputStream();
+                result = parseInfo(is);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    // Send request to SetRecordServlet to set the new world record
+    public static String setRecord(String recordString) {
+        String address = "http://" + CONSTANTS.IP + ":" + CONSTANTS.PORT + "/AndroidServer/setRecord";
+        String result = "";
+        try {
+            HttpURLConnection conn = init(address, "recordString");
+            if (conn.getResponseCode() == 200) {
+                // Get input stream and read by byte
+                InputStream is = conn.getInputStream();
+                result = parseInfo(is);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    // Send request to SetRecordServlet to set the new world record
+    public static String setBestScoreByPost(String account, int thisScore) {
+        String address = "http://" + CONSTANTS.IP + ":" + CONSTANTS.PORT + "/AndroidServer/setBestScore";
+        String result = "";
+        try {
+            // Request content
+            String data = "account=" + URLEncoder.encode(account, "UTF-8") + "&BestScore=" + thisScore;
+            HttpURLConnection conn = init(address, data);
             if (conn.getResponseCode() == 200) {
                 // Get input stream and read by byte
                 InputStream is = conn.getInputStream();

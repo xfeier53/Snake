@@ -41,4 +41,13 @@
         <servlet-name>Record</servlet-name>
         <url-pattern>/getRecord</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>SetRecord</servlet-name>
+        <servlet-class>com.anu.SetRecordServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetRecord</servlet-name>
+        <url-pattern>/setRecord</url-pattern>
+    </servlet-mapping>
 </web-app>

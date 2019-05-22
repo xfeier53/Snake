@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         // Pass in the parameter
-                        String result = HTTPConnection.LoginByPost(account.getText().toString(), password.getText().toString());
+                        String result = HTTPConnection.loginByPost(account.getText().toString(), password.getText().toString());
                         // Use Bundle for multiple parameters. Althought only one parameter here, use it here for consistency
                         Bundle bundle = new Bundle();
                         bundle.putString("result", result);
@@ -108,8 +108,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // Use Bundle for multiple parameters
                 Bundle bundle = new Bundle();
                 // Put in multiple parameters and turn to the new activity
-                bundle.putString("account", "Feier");
-                bundle.putInt("score", 100);
+                bundle.putString("account", "Yuan");
+                bundle.putInt("score", 5000);
                 intent.putExtra("data", bundle);
                 startActivity(intent);
             }
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("How To Play??");
                 builder.setMessage("1. Swipe to control snake\n" +
-                        "2. Touch the red obstacle, the bound, the snake body, GAME OVER!\n" + 
+                        "2. Touch the red obstacle, the bound, the snake body, GAME OVER!\n" +
                         "3. White food: 1 mark, snake length increase, speed up\n" +
                         "4. Darkblue food : 5 marks, snake length greatly increase, speed down\n" +
                         "5. Skyblue fodd: 10 marks, snake won't increase, only 4 in each game");
