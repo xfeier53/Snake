@@ -54,6 +54,7 @@ public class GameView extends SurfaceView implements Runnable {
     private int obstacle_x;
     private int obstacle_y;
     private Paint obstacle_paint = new Paint();
+    private Random rand_special = new Random();
     private int normal_count = 0;
     private int special_food_x;
     private int special_food_y;
@@ -92,7 +93,8 @@ public class GameView extends SurfaceView implements Runnable {
         //Define the every pixel block size of the game layout
         block_size = screen_width/block_wide;
         block_high = screen_height/block_size;
-
+        special_food_x =rand_special.nextInt(block_wide - 1) + 1;
+        special_food_y =rand_special.nextInt(block_high - 1) + 1;
         m_Holder = getHolder();
         m_Paint = new Paint();
 
@@ -143,7 +145,6 @@ public class GameView extends SurfaceView implements Runnable {
         spawnFood();
 
         //Add a special food
-        special_food();
         // Add an obstacle
         spawnObstacle();
         // initial socre to 0
@@ -168,14 +169,14 @@ public class GameView extends SurfaceView implements Runnable {
     //Initialize the surprise food in the corner.
     public void surprise_food(){
 
-            surprise_food_1_x = 100;
-            surprise_food_1_y = 100;
-            surprise_food_2_x = block_wide - 100;
-            surprise_food_2_y = 100;
-            surprise_food_3_x = 100;
-            surprise_food_3_y = block_high - 100;
-            surprise_food_4_x = block_wide - 100;
-            surprise_food_4_y = block_high - 100;
+            surprise_food_1_x = 1;
+            surprise_food_1_y = 1;
+            surprise_food_2_x = block_wide - 2;
+            surprise_food_2_y = 1;
+            surprise_food_3_x = 1;
+            surprise_food_3_y = block_high - 2;
+            surprise_food_4_x = block_wide - 2;
+            surprise_food_4_y = block_high - 2;
 
     }
 
@@ -228,10 +229,11 @@ public class GameView extends SurfaceView implements Runnable {
         // increase the length of snake after eating food
         normal_count++;
         snake_length++;
-
         // add another food
         spawnFood();
-        surprise_food();
+        if(m_score>=6) {
+            surprise_food();
+        }
         // add another obstacle
         spawnObstacle();
 
@@ -366,7 +368,7 @@ public void drawGame(){
                     m_Paint);
         }
         //draw the surprise food when the score is more than 10
-      //  if(m_score>=6) {
+      if(m_score>=6) {
             if (surprise_food_1)
                 canvas.drawRect(surprise_food_1_x * block_size, (surprise_food_1_y * block_size), (surprise_food_1_x * block_size) + block_size, (surprise_food_1_y * block_size) + block_size, surprise_paint);
             if (surprise_food_2)
@@ -375,7 +377,7 @@ public void drawGame(){
                 canvas.drawRect(surprise_food_3_x * block_size, (surprise_food_3_y * block_size), (surprise_food_3_x * block_size) + block_size, (surprise_food_3_y * block_size) + block_size, surprise_paint);
             if (surprise_food_4)
                 canvas.drawRect(surprise_food_4_x * block_size, (surprise_food_4_y * block_size), (surprise_food_4_x * block_size) + block_size, (surprise_food_4_y * block_size) + block_size, surprise_paint);
-       // }
+        }
         //food and special food
         if (normal_count!=reference_count)
             canvas.drawRect(food_x*block_size,(food_y*block_size),(food_x*block_size)+block_size,(food_y*block_size)+block_size,m_Paint);
