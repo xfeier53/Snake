@@ -443,8 +443,6 @@ public boolean onTouchEvent(MotionEvent motionEvent){
                 }
             }
             return true;
-
-
 }
 
 // This function will speed up the snake after eating food
