@@ -1,28 +1,17 @@
-package com.example.snake;
+package com.anu.snake;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.support.constraint.solver.widgets.Helper;
-import android.support.v7.widget.ThemedSpinnerAdapter;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Random;
 
-
-import java.util.List;
 /*
 Authorship: Yu Wang
             Tao Xu

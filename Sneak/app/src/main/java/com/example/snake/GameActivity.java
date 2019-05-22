@@ -14,7 +14,7 @@ Authorship: Yu Wang
             Tao Xu
             Yue Zhou
  */
-public class MainActivity extends Activity {
+public class GameActivity extends Activity {
     private GameView gameView;
     //This method loads the GameView, and get the screen size of the phone or tablet.
     @Override
