@@ -103,7 +103,6 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
                         }
                         recordString = recordString + d.name + " " + d.score + " ";
                     }
-                    Log.d("Test", recordString);
                     if (flag == true) {
                         setRecord();
                     }
@@ -212,7 +211,12 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.exit: {
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, GameActivity.class);
+                // Use Bundle for multiple parameters
+                Bundle bundle = new Bundle();
+                // Put in multiple parameters and turn to the new activity
+                bundle.putString("account", account);
+                intent.putExtra("data", bundle);
                 startActivity(intent);
             }
             break;

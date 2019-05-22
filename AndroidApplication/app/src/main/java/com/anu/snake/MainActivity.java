@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             // Use Bundle for multiple parameters
                             bundle = new Bundle();
                             // Put in multiple parameters and turn to the new activity
-                            bundle.putString("account", "Yuan");
+                            bundle.putString("account", account.getText().toString());
                             intent.putExtra("data", bundle);
                             startActivity(intent);
                         } else {

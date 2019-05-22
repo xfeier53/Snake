@@ -31,11 +31,23 @@ public class GameActivity extends Activity {
         EventBus.getDefault().register(this);
 
     }
+
     @EventBus.Subscribe
     public void eventReceiver(EventHandler event) {
         if(event.getText() == "dead"){
-            Log.d("aaaaa","sile");
+            Intent intent = getIntent();
+            Bundle bundle = intent.getBundleExtra("data");
+            account = bundle.getString("account");
+            score = gameView.m_score;
 
+            intent = new Intent(GameActivity.this, RankActivity.class);
+            // Use Bundle for multiple parameters
+            bundle = new Bundle();
+            // Put in multiple parameters and turn to the new activity
+            bundle.putString("account", account);
+            bundle.putInt("score", score);
+            intent.putExtra("data", bundle);
+            startActivity(intent);
         }
     }
 
@@ -50,18 +62,4 @@ public class GameActivity extends Activity {
         gameView.pause();
     }
 
-    public void next() {
-        Intent intent = getIntent();
-        Bundle bundle = intent.getBundleExtra("data");
-        account = bundle.getString("account");
-        score = gameView.m_score;
-
-        intent = new Intent(GameActivity.this, RankActivity.class);
-        // Use Bundle for multiple parameters
-        bundle = new Bundle();
-        // Put in multiple parameters and turn to the new activity
-        bundle.putString("account", account);
-        intent.putExtra("score", score);
-        startActivity(intent);
-    }
 }

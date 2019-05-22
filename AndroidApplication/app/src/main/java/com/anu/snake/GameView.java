@@ -347,8 +347,8 @@ public void updateGame(){
     }
     moveSnake();
     if(detectDeath()){
+        isPause = true;
         EventBus.getDefault().post(new EventHandler("dead"));
-        startGame();
     }
 }
 //This is the function which draw the entire game layout, snake, food, special food and obstacle.
