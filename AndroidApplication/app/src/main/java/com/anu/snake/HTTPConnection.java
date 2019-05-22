@@ -4,6 +4,8 @@ Authorship: Feier Xiao
 
 package com.anu.snake;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -103,7 +105,7 @@ public class HTTPConnection {
     }
 
     // Send request to RecordServlet to retrieve world record
-    public static String getRecord() {
+    public static String getRecordByPost() {
         String address = "http://" + CONSTANTS.IP + ":" + CONSTANTS.PORT + "/AndroidServer/getRecord";
         String result = "";
         try {
@@ -120,7 +122,7 @@ public class HTTPConnection {
     }
 
     // Send request to SetRecordServlet to set the new world record
-    public static String setRecord(String recordString) {
+    public static String setRecordByPost(String recordString) {
         String address = "http://" + CONSTANTS.IP + ":" + CONSTANTS.PORT + "/AndroidServer/setRecord";
         String result = "";
         try {

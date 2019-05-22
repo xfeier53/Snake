@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
 
-public class Record {
+public class GetRecord {
 	public String getRecord() {
 		String result = "";
         String query = "SELECT * FROM Record";

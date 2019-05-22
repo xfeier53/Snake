@@ -24,7 +24,6 @@ public class SetRecord {
         }
         insertQuery = insertQuery.substring(0, insertQuery.length() - 2);
         insertQuery = insertQuery + ";";    
-        System.out.println(insertQuery);
         
         try{
         	// Get the driver class

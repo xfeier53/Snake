@@ -32,7 +32,6 @@
 
     <EditText
         android:id="@+id/account"
-        android:textColor="@color/colorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/howToPlay"
@@ -40,20 +39,23 @@
         android:layout_marginTop="30dp"
         android:ems="10"
         android:hint="Account"
-        android:inputType="text" />
+        android:inputType="text"
+        android:text="Feier"
+        android:textColor="@color/colorPrimary" />
 
     <EditText
         android:id="@+id/password"
-        android:textColor="@color/colorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/account"
         android:layout_alignEnd="@+id/account"
         android:layout_alignRight="@+id/account"
-        android:layout_below="@+id/account"
         android:layout_marginTop="28dp"
         android:ems="10"
+        android:hint="Password"
         android:inputType="textPassword"
-        android:hint="Password"/>
+        android:text="123"
+        android:textColor="@color/colorPrimary" />
 
     <Button
         android:id="@+id/login"

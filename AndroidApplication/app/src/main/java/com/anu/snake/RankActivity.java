@@ -45,7 +45,7 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
         Bundle bundle = intent.getBundleExtra("data");
         account = bundle.getString("account");
         myThisScore = bundle.getInt("score");
-        thisScore.setText("" + myThisScore);
+        thisScore.setText(""+myThisScore);
         getData();
     }
 
@@ -59,6 +59,9 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
                     Bundle bundle = msg.getData();
                     myBestScore = bundle.getInt("result");
                     bestScore.setText("" + myBestScore);
+                    if (myThisScore > myBestScore) {
+                        setBestScore();
+                    }
                 }
                 break;
 
@@ -95,23 +98,31 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
                     recordStringWithSpace = "";
-                    // Convert the list into String in format
+                    recordStringWithLine = "";
+                    // I is a counter, we need only first 5 records
+                    int i = 0;
+                    // Convert the list into String with format
                     for (Data d : recordList) {
+                        if (i++ == 5) {
+                            break;
+                        }
                         // Check whether the score is better than the any record
                         if (flag == false && myThisScore > d.score) {
                             flag = true;
                             // Need the format with space
                             recordStringWithSpace = recordStringWithSpace + account + " " + myThisScore + " ";
                             recordStringWithLine = recordStringWithLine + account + " " + myThisScore + "\n";
+                            if (i++ == 5) {
+                                break;
+                            }
                         }
                         recordStringWithSpace = recordStringWithSpace + d.name + " " + d.score + " ";
                         recordStringWithLine = recordStringWithLine + d.name + " " + d.score + "\n";
                     }
                     if (flag == true) {
                         setRecord();
-                    } else {
-                        record.setText(recordStringWithLine);
                     }
+                    record.setText(recordStringWithLine);
                 }
                 break;
 
@@ -121,7 +132,7 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
                     // Process based on the response information
                     if (result.equals("success")) {
                         // New record
-                        Toast.makeText(RankActivity.this, "New Record！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RankActivity.this, "New World Record！", Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
@@ -143,7 +154,7 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
 
     public void getData() {
         // A thread to retrieve the user's best score
-        Thread t1 = new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 int result = HTTPConnection.getBestScoreByPost(account);
@@ -154,13 +165,13 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
                 msg.setData(bundle);
                 handler.sendMessage(msg);
             }
-        });
+        }).start();
 
         // A thread to retrieve the world records
-        Thread t2 = new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                String result = HTTPConnection.getRecord();
+                String result = HTTPConnection.getRecordByPost();
                 Bundle bundle = new Bundle();
                 bundle.putString("result", result);
                 Message msg = new Message();
@@ -168,33 +179,7 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
                 msg.setData(bundle);
                 handler.sendMessage(msg);
             }
-        });
-
-        // A thread to set the user's best score
-        Thread t3 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String result = HTTPConnection.setBestScoreByPost(account, myThisScore);
-                Bundle bundle = new Bundle();
-                bundle.putString("result", result);
-                Message msg = new Message();
-                msg.what = CONSTANTS.NEW_SCORE_PROCESS;
-                msg.setData(bundle);
-                handler.sendMessage(msg);
-            }
-        });
-        try {
-            t1.start();
-            t1.join();
-            t2.start();
-            t2.join();
-            if (myThisScore > myBestScore) {
-                t3.start();
-                t3.join();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        }).start();
     }
 
     public void setRecord() {
@@ -202,11 +187,27 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String result = HTTPConnection.setRecord(recordStringWithSpace);
+                String result = HTTPConnection.setRecordByPost(recordStringWithSpace);
                 Bundle bundle = new Bundle();
                 bundle.putString("result", result);
                 Message msg = new Message();
                 msg.what = CONSTANTS.NEW_RECORD_PROCESS;
+                msg.setData(bundle);
+                handler.sendMessage(msg);
+            }
+        }).start();
+    }
+
+    public void setBestScore() {
+        // A thread to set the user's best score
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String result = HTTPConnection.setBestScoreByPost(account, myThisScore);
+                Bundle bundle = new Bundle();
+                bundle.putString("result", result);
+                Message msg = new Message();
+                msg.what = CONSTANTS.NEW_SCORE_PROCESS;
                 msg.setData(bundle);
                 handler.sendMessage(msg);
             }
