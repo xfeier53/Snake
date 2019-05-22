@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 public class RegisterServlet extends HttpServlet {
 	
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=utf-8");
+        // Setting for the content type and encoding
+    	response.setContentType("text/html;charset=utf-8");
         response.setCharacterEncoding("UTF-8");
+        // Get parameters
         String account=request.getParameter("account");
         String password=request.getParameter("password");
         String email = request.getParameter("email");
@@ -20,8 +22,9 @@ public class RegisterServlet extends HttpServlet {
         boolean isRegisterSuccessful = false;
         Register register = new Register();
         String result;
-        isRegisterSuccessful=register.userRegister(account, password, email);
+        isRegisterSuccessful = register.userRegister(account, password, email);
         PrintWriter out = response.getWriter();
+        // Write in the result
         if(isRegisterSuccessful){
             result = "success";
         }
