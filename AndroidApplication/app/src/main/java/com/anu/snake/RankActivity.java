@@ -15,11 +15,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class RankActivity extends AppCompatActivity {
+public class RankActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button restart, back;
-    private final static int SCORE = 2;
-    private final static int RECORD = 3;
+    private Button restart, exit;
     private TextView thisScore, bestScore, record;
     private String account, stringRecord, recordName;
     private int myBestScore, myThisScore, maxIndex;
@@ -31,7 +29,9 @@ public class RankActivity extends AppCompatActivity {
         setContentView(R.layout.activity_rank);
 
         restart = findViewById(R.id.restart);
-        back = findViewById(R.id.back);
+        restart.setOnClickListener(this);
+        exit = findViewById(R.id.exit);
+        exit.setOnClickListener(this);
         thisScore = findViewById(R.id.thisScore);
         bestScore = findViewById(R.id.bestScore);
         record = findViewById(R.id.record);
@@ -41,8 +41,7 @@ public class RankActivity extends AppCompatActivity {
         account = bundle.getString("account");
         myThisScore = bundle.getInt("score");
         thisScore.setText("" + myThisScore);
-        getBestScore();
-        getRecord();
+        getData();
     }
 
     Handler handler = new Handler() {
@@ -50,18 +49,21 @@ public class RankActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case SCORE: {
+                // Retrieve the user's best score
+                case CONSTANTS.SCORE_PROCESS: {
                     Bundle bundle = msg.getData();
                     myBestScore = bundle.getInt("result");
                     bestScore.setText("" + myBestScore);
                 }
                 break;
 
-                case RECORD: {
+                // Retrive the record
+                case CONSTANTS.RECORD_PROCESS: {
                     recordList = new ArrayList<>();
                     Bundle bundle = msg.getData();
                     stringRecord = bundle.getString("result");
                     String[] rows = stringRecord.split(" ");
+                    // Splid the string and store the data into list of Data type
                     for (int i = 0; i < 10; i++) {
                         if (i % 2 == 0) {
                             recordName = rows[i];
@@ -69,14 +71,16 @@ public class RankActivity extends AppCompatActivity {
                             recordList.add(new Data(recordName, Integer.valueOf(rows[i])));
                         }
                     }
-
+                    // Sorting the list based on the score
                     for (int i = 0; i < 5; i++) {
                         maxIndex = i;
+                        // Find the maximum score
                         for (int j = i + 1; j < 5; j++) {
                             if (recordList.get(maxIndex).score < recordList.get(j).score) {
                                 maxIndex = j;
                             }
                         }
+                        // Swap the value for i and maximum
                         if (i != maxIndex) {
                             Data temp = recordList.get(maxIndex);
                             recordList.remove(maxIndex);
@@ -86,9 +90,11 @@ public class RankActivity extends AppCompatActivity {
                         }
                     }
                     stringRecord = "";
+                    // Convert the list into String in format
                     for (Data d : recordList) {
                         stringRecord = stringRecord + d.name + " " + d.score + "\n";
                     }
+                    // Set the record for the activity
                     record.setText(stringRecord);
                 }
                 break;
@@ -96,7 +102,8 @@ public class RankActivity extends AppCompatActivity {
         }
     };
 
-    public void getBestScore() {
+    public void getData() {
+        // A thread to retrieve the user's best score
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -104,14 +111,13 @@ public class RankActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putInt("result", result);
                 Message msg = new Message();
-                msg.what = SCORE;
+                msg.what = CONSTANTS.SCORE_PROCESS;
                 msg.setData(bundle);
                 handler.sendMessage(msg);
             }
         }).start();
-    }
 
-    public void getRecord() {
+        // A thread to retrieve the world records
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -119,13 +125,33 @@ public class RankActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("result", result);
                 Message msg = new Message();
-                msg.what = RECORD;
+                msg.what = CONSTANTS.RECORD_PROCESS;
                 msg.setData(bundle);
                 handler.sendMessage(msg);
             }
         }).start();
     }
 
+
+    // Bind the onclick method with the buttons
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.exit: {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            }
+            break;
+            case R.id.restart: {
+                // Turn to the register page
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            }
+            break;
+        }
+    }
+
+    // A class that store two value, used to process the records list
     class Data {
         String name;
         int score;

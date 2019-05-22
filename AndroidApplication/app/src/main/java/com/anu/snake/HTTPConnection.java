@@ -1,12 +1,6 @@
 package com.anu.snake;
 
-import android.content.Intent;
-import android.util.Log;
-
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,13 +9,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.sql.Connection;
 
 public class HTTPConnection {
-
-    private static final String PORT = "8080";
-    private static final String IP = "172.20.10.5";
-
+    // Init the connection, connect and retrive the result
     private static HttpURLConnection init(String address, String data) {
         try {
             URL url = new URL(address);
@@ -34,6 +24,7 @@ public class HTTPConnection {
             conn.setUseCaches(false);
             // Get output stream
             OutputStream out = conn.getOutputStream();
+            // Write in the request
             out.write(data.getBytes());
             out.flush();
             out.close();
@@ -47,15 +38,16 @@ public class HTTPConnection {
         return null;
     }
 
+    // Send request to login servlet, to retrieve the user profile for validation
     public static String LoginByPost(String account, String password) {
         String result = "";
-        String address = "http://" + IP + ":" + PORT + "/AndroidServer/login";
+        String address = "http://" + CONSTANTS.IP + ":" + CONSTANTS.PORT + "/AndroidServer/login";
         try {
-            // Request
+            // Request content
             String data = "account=" + URLEncoder.encode(account, "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8");
             HttpURLConnection conn = init(address, data);
             if (conn.getResponseCode() == 200) {
-                // Get input stream and read by byte
+                // Get the intput stream
                 InputStream is = conn.getInputStream();
                 // Return result
                 result = parseInfo(is);
@@ -66,15 +58,16 @@ public class HTTPConnection {
         return result;
     }
 
+    // Send request to register servlet and add user into databse
     public static String RegisterByPost(String account, String password, String email) {
-        String address = "http://" + IP + ":" + PORT + "/AndroidServer/register";
+        String address = "http://" + CONSTANTS.IP + ":" + CONSTANTS.PORT + "/AndroidServer/register";
         String result = "";
         try {
-            // Request
+            // Request content
             String data = "account=" + URLEncoder.encode(account, "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8") + "&email=" + URLEncoder.encode(email, "UTF-8");
             HttpURLConnection conn = init(address, data);
             if (conn.getResponseCode() == 200) {
-                // Get input stream and read by byte
+                // Get the input stream
                 InputStream is = conn.getInputStream();
                 // Return result
                 result = parseInfo(is);
@@ -85,11 +78,11 @@ public class HTTPConnection {
         return result;
     }
 
-
+    // Send request to GetBestScoreServlet servlet to retrieve user's best score
     public static int GetBestScoreByPost(String account) {
-        String address = "http://" + IP + ":" + PORT + "/AndroidServer/getBestScore";
+        String address = "http://" + CONSTANTS.IP + ":" + CONSTANTS.PORT + "/AndroidServer/getBestScore";
         String result = "";
-        int score =  0;
+        int score = 0;
         try {
             String data = "account=" + URLEncoder.encode(account, "UTF-8");
             HttpURLConnection conn = init(address, data);
@@ -105,8 +98,9 @@ public class HTTPConnection {
         return score;
     }
 
+    // Send request to RecordServlet to retrieve world record
     public static String GetRecord() {
-        String address = "http://" + IP + ":" + PORT + "/AndroidServer/getRecord";
+        String address = "http://" + CONSTANTS.IP + ":" + CONSTANTS.PORT + "/AndroidServer/getRecord";
         String result = "";
         try {
             HttpURLConnection conn = init(address, "");
@@ -121,24 +115,27 @@ public class HTTPConnection {
         return result;
     }
 
-
-    public static String parseInfo(InputStream inputStream){
+    // Tool to convert inputStream content into String
+    public static String parseInfo(InputStream inputStream) {
         BufferedReader reader = null;
         String line = "";
         StringBuilder response = new StringBuilder();
         try {
+            // Init BufferedReader
             reader = new BufferedReader(new InputStreamReader(inputStream));
-            while((line = reader.readLine()) != null){
+            // Read line
+            while ((line = reader.readLine()) != null) {
                 response.append(line);
             }
             return response.toString();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if(reader != null){
-                try{
+        } finally {
+            // If the reader is not null, release the resource
+            if (reader != null) {
+                try {
                     reader.close();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
