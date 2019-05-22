@@ -107,6 +107,14 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
                         setRecord();
                     } else {
                         // Set the record for the activity
+                        for (Data d : recordList) {
+                            // Check whether the score is better than the any record
+                            if (flag == false && myThisScore > d.score) {
+                                flag = true;
+                                recordString = recordString + account + " " + myThisScore + "\n";
+                            }
+                            recordString = recordString + d.name + " " + d.score + "\n";
+                        }
                         record.setText(recordString);
                     }
                 }
