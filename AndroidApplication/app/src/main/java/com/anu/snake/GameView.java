@@ -283,7 +283,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     //This function will be triggered if the snake runs into the wall, runs into the obstacle or runs
     //into itself.
-    private boolean detectDeath() {
+    public boolean detectDeath(){
         boolean dead = false;
 
         // check if hit a wall
@@ -315,82 +315,82 @@ public class GameView extends SurfaceView implements Runnable {
         if (snake_x[0] >= obstacle_x && snake_x[0] <= obstacle_x + 1 && snake_y[0] >= obstacle_y && snake_y[0] <= obstacle_y + 4) {
             dead = true;
         }
-        if (dead = true) {
-
-        }
+//        if (dead = true) {
+//
+//        }
         return dead;
     }
 
-    //This function updates the game when the snake eats the food, special food, surprise food or dies.
-    public void updateGame() {
-        if (snake_x[0] == food_x && snake_y[0] == food_y) {
-            eatFood();
-        }
-        if (snake_x[0] == special_food_x && snake_y[0] == special_food_y) {
-            eat_special_Food();
-        }
-        if (snake_x[0] == surprise_food_1_x && snake_y[0] == surprise_food_1_y && surprise_food_1) {
-            eat_surprise();
-            surprise_food_1 = false;
-        }
-        if (snake_x[0] == surprise_food_2_x && snake_y[0] == surprise_food_2_y && surprise_food_2) {
-            eat_surprise();
-            surprise_food_2 = false;
-        }
-        if (snake_x[0] == surprise_food_3_x && snake_y[0] == surprise_food_3_y && surprise_food_3) {
-            eat_surprise();
-            surprise_food_3 = false;
-        }
-        if (snake_x[0] == surprise_food_4_x && snake_y[0] == surprise_food_4_y && surprise_food_4) {
-            eat_surprise();
-            surprise_food_4 = false;
-        }
-        moveSnake();
-        if (detectDeath()) {
-            isPause = true;
-        }
+//This function updates the game when the snake eats the food, special food, surprise food or dies.
+public void updateGame(){
+    if(snake_x[0]==food_x&&snake_y[0]==food_y){
+        eatFood();
     }
-
-    //This is the function which draw the entire game layout, snake, food, special food and obstacle.
-    public void drawGame() {
-        if (m_Holder.getSurface().isValid()) {
-            canvas = m_Holder.lockCanvas();
-            canvas.drawColor(Color.argb(255, 120, 197, 87));
-            m_Paint.setColor(Color.argb(255, 255, 255, 255));
-            surprise_paint.setColor(Color.argb(255, 80, 255, 255));
-            obstacle_paint.setColor(Color.argb(255, 255, 120, 120));
-            special_food_paint.setColor(Color.argb(255, 120, 120, 255));
-            m_Paint.setTextSize(30);
-            canvas.drawText("Score: " + m_score, screen_width / 2, 30, m_Paint);
-            // snake drawing
-            for (int i = 0; i < snake_length; i++) {
-                canvas.drawRect(snake_x[i] * block_size,
-                        (snake_y[i] * block_size),
-                        (snake_x[i] * block_size) + block_size,
-                        (snake_y[i] * block_size) + block_size,
-                        m_Paint);
-            }
-            //draw the surprise food when the score is more than 10
-            if (m_score == 10) {
-                surprise_food();
-            }
-            if (m_score >= 10) {
-                if (surprise_food_1)
-                    canvas.drawRect(surprise_food_1_x * block_size, (surprise_food_1_y * block_size), (surprise_food_1_x * block_size) + block_size, (surprise_food_1_y * block_size) + block_size, surprise_paint);
-                if (surprise_food_2)
-                    canvas.drawRect(surprise_food_2_x * block_size, (surprise_food_2_y * block_size), (surprise_food_2_x * block_size) + block_size, (surprise_food_2_y * block_size) + block_size, surprise_paint);
-                if (surprise_food_3)
-                    canvas.drawRect(surprise_food_3_x * block_size, (surprise_food_3_y * block_size), (surprise_food_3_x * block_size) + block_size, (surprise_food_3_y * block_size) + block_size, surprise_paint);
-                if (surprise_food_4)
-                    canvas.drawRect(surprise_food_4_x * block_size, (surprise_food_4_y * block_size), (surprise_food_4_x * block_size) + block_size, (surprise_food_4_y * block_size) + block_size, surprise_paint);
-            }
-            //food and special food
-            if (normal_count != reference_count)
-                canvas.drawRect(food_x * block_size, (food_y * block_size), (food_x * block_size) + block_size, (food_y * block_size) + block_size, m_Paint);
-            else {
-                canvas.drawRect(special_food_x * block_size, (special_food_y * block_size), (special_food_x * block_size) + block_size, (special_food_y * block_size) + block_size, special_food_paint);
-            }
-            //obstacle
+    if(snake_x[0]==special_food_x&&snake_y[0]==special_food_y){
+        eat_special_Food();
+    }
+    if(snake_x[0]==surprise_food_1_x&&snake_y[0]==surprise_food_1_y&&surprise_food_1){
+        eat_surprise();
+        surprise_food_1 = false;
+    }
+    if(snake_x[0]==surprise_food_2_x&&snake_y[0]==surprise_food_2_y&&surprise_food_2){
+        eat_surprise();
+        surprise_food_2 = false;
+    }
+    if(snake_x[0]==surprise_food_3_x&&snake_y[0]==surprise_food_3_y&&surprise_food_3){
+        eat_surprise();
+        surprise_food_3 = false;
+    }
+    if(snake_x[0]==surprise_food_4_x&&snake_y[0]==surprise_food_4_y&&surprise_food_4){
+        eat_surprise();
+        surprise_food_4 = false;
+    }
+    moveSnake();
+    if(detectDeath()){
+        EventBus.getDefault().post(new EventHandler("dead"));
+        startGame();
+    }
+}
+//This is the function which draw the entire game layout, snake, food, special food and obstacle.
+public void drawGame(){
+    if(m_Holder.getSurface().isValid()){
+        canvas = m_Holder.lockCanvas();
+        canvas.drawColor(Color.argb(255,120,197,87));
+        m_Paint.setColor(Color.argb(255, 255, 255, 255));
+        surprise_paint.setColor(Color.argb(255,80,255,255));
+        obstacle_paint.setColor(Color.argb(255,255,120,120));
+        special_food_paint.setColor(Color.argb(255,120,120,255));
+        m_Paint.setTextSize(30);
+        canvas.drawText("Score: "+m_score,screen_width/2,30,m_Paint);
+        // snake drawing
+        for (int i = 0; i < snake_length; i++) {
+            canvas.drawRect(snake_x[i] * block_size,
+                    (snake_y[i] * block_size),
+                    (snake_x[i] * block_size) + block_size,
+                    (snake_y[i] * block_size) + block_size,
+                    m_Paint);
+        }
+        //draw the surprise food when the score is more than 10
+        if(m_score==10) {
+            surprise_food();
+        }
+        if(m_score>=10) {
+            if (surprise_food_1)
+                canvas.drawRect(surprise_food_1_x * block_size, (surprise_food_1_y * block_size), (surprise_food_1_x * block_size) + block_size, (surprise_food_1_y * block_size) + block_size, surprise_paint);
+            if (surprise_food_2)
+                canvas.drawRect(surprise_food_2_x * block_size, (surprise_food_2_y * block_size), (surprise_food_2_x * block_size) + block_size, (surprise_food_2_y * block_size) + block_size, surprise_paint);
+            if (surprise_food_3)
+                canvas.drawRect(surprise_food_3_x * block_size, (surprise_food_3_y * block_size), (surprise_food_3_x * block_size) + block_size, (surprise_food_3_y * block_size) + block_size, surprise_paint);
+            if (surprise_food_4)
+                canvas.drawRect(surprise_food_4_x * block_size, (surprise_food_4_y * block_size), (surprise_food_4_x * block_size) + block_size, (surprise_food_4_y * block_size) + block_size, surprise_paint);
+        }
+        //food and special food
+        if (normal_count!=reference_count)
+            canvas.drawRect(food_x*block_size,(food_y*block_size),(food_x*block_size)+block_size,(food_y*block_size)+block_size,m_Paint);
+        else{
+            canvas.drawRect(special_food_x*block_size,(special_food_y*block_size),(special_food_x*block_size)+block_size,(special_food_y*block_size)+block_size,special_food_paint);
+        }
+        //obstacle
 //        for(int[] obstacle : obstacles){
 //            canvas.drawRect(obstacle[0]*block_size,(obstacle[1]*block_size),(obstacle[0]*block_size)+block_size*2,(obstacle[1]*block_size)+block_size*5,obstacle_paint);
 //        }

@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 
 public class GameActivity extends Activity {
@@ -27,7 +28,17 @@ public class GameActivity extends Activity {
         display.getSize(size);
         gameView = new GameView(this,size);
         setContentView(gameView);
+        EventBus.getDefault().register(this);
+
     }
+    @EventBus.Subscribe
+    public void eventReceiver(EventHandler event) {
+        if(event.getText() == "dead"){
+            Log.d("aaaaa","sile");
+
+        }
+    }
+
     @Override
     protected void onResume(){
         super.onResume();
