@@ -49,6 +49,7 @@ public class GameView extends SurfaceView implements Runnable {
     private Paint obstacle_paint = new Paint();
     private Random rand_special = new Random();
     private int normal_count = 0;
+    private boolean special_food;
     private int special_food_x;
     private int special_food_y;
     private int reference_count = 5;
@@ -299,8 +300,9 @@ public void updateGame(){
     if(snake_x[0]==food_x&&snake_y[0]==food_y){
         eatFood();
     }
-    if(snake_x[0]==special_food_x&&snake_y[0]==special_food_y){
+    if(snake_x[0]==special_food_x&&snake_y[0]==special_food_y&&special_food){
         eat_special_Food();
+        special_food=false;
     }
     if(snake_x[0]==surprise_food_1_x&&snake_y[0]==surprise_food_1_y&&surprise_food_1){
         eat_surprise();
@@ -361,6 +363,7 @@ public void drawGame(){
         if (normal_count!=reference_count)
             canvas.drawRect(food_x*block_size,(food_y*block_size),(food_x*block_size)+block_size,(food_y*block_size)+block_size,m_Paint);
         else{
+            special_food = true;
             canvas.drawRect(special_food_x*block_size,(special_food_y*block_size),(special_food_x*block_size)+block_size,(special_food_y*block_size)+block_size,special_food_paint);
         }
         //obstacle
