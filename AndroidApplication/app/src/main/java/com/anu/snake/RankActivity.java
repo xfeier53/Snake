@@ -23,7 +23,7 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button restart, exit;
     private TextView thisScore, bestScore, record;
-    private String account, recordString, recordName;
+    private String account, recordString, recordStringWithSpace, recordStringWithLine, recordName;
     private int myBestScore, myThisScore, maxIndex;
     private List<Data> recordList;
     private boolean flag = false;
@@ -94,29 +94,23 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
                             recordList.add(i, temp);
                         }
                     }
-                    recordString = "";
+                    recordStringWithSpace = "";
                     // Convert the list into String in format
                     for (Data d : recordList) {
                         // Check whether the score is better than the any record
                         if (flag == false && myThisScore > d.score) {
                             flag = true;
-                            recordString = recordString + account + " " + myThisScore + " ";
+                            // Need the format with space
+                            recordStringWithSpace = recordStringWithSpace + account + " " + myThisScore + " ";
+                            recordStringWithLine = recordStringWithLine + account + " " + myThisScore + "\n";
                         }
-                        recordString = recordString + d.name + " " + d.score + " ";
+                        recordStringWithSpace = recordStringWithSpace + d.name + " " + d.score + " ";
+                        recordStringWithLine = recordStringWithLine + d.name + " " + d.score + "\n";
                     }
                     if (flag == true) {
                         setRecord();
                     } else {
-                        // Set the record for the activity
-                        for (Data d : recordList) {
-                            // Check whether the score is better than the any record
-                            if (flag == false && myThisScore > d.score) {
-                                flag = true;
-                                recordString = recordString + account + " " + myThisScore + "\n";
-                            }
-                            recordString = recordString + d.name + " " + d.score + "\n";
-                        }
-                        record.setText(recordString);
+                        record.setText(recordStringWithLine);
                     }
                 }
                 break;
@@ -128,14 +122,6 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
                     if (result.equals("success")) {
                         // New record
                         Toast.makeText(RankActivity.this, "New Record！", Toast.LENGTH_SHORT).show();
-                        Log.d("test", recordString);
-                        String temp[] = recordString.split(" ");
-                        recordString = "";
-                        for (int i = 0; i < 10; i = i + 2) {
-                            recordString = recordString + temp[i] + " " + temp[i + 1] + "\n";
-                        }
-                        // Set the record for the activity
-                        record.setText(recordString);
                     }
                 }
                 break;
@@ -216,7 +202,7 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String result = HTTPConnection.setRecord(recordString);
+                String result = HTTPConnection.setRecord(recordStringWithSpace);
                 Bundle bundle = new Bundle();
                 bundle.putString("result", result);
                 Message msg = new Message();
