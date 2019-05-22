@@ -110,7 +110,7 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
                     if (flag == true) {
                         setRecord();
                     } else {
-                        record.setText(recordString);
+                        record.setText(recordStringWithSpace);
                     }
                 }
                 break;
