@@ -32,4 +32,13 @@
         <servlet-name>GetBestScore</servlet-name>
         <url-pattern>/getBestScore</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>Record</servlet-name>
+        <servlet-class>com.anu.RecordServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Record</servlet-name>
+        <url-pattern>/getRecord</url-pattern>
+    </servlet-mapping>
 </web-app>
