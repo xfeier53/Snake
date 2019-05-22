@@ -5,6 +5,7 @@ Authorship: Feier Xiao
 package com.anu.snake;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +32,7 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rank);
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         restart = findViewById(R.id.restart);
         restart.setOnClickListener(this);
         exit = findViewById(R.id.exit);
