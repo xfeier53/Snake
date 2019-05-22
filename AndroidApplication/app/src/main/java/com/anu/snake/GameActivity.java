@@ -1,18 +1,22 @@
-package com.anu.snake;
-
-import android.app.Activity;
-import android.content.pm.ActivityInfo;
-import android.graphics.Point;
-import android.os.Bundle;
-import android.view.Display;
-
 /*
 Authorship: Yu Wang
             Tao Xu
             Yue Zhou
  */
+
+package com.anu.snake;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.Point;
+import android.os.Bundle;
+import android.view.Display;
+
 public class GameActivity extends Activity {
-    private GameView gameView;
+    public GameView gameView;
+    public String account;
+    public int score;
     //This method loads the GameView, and get the screen size of the phone or tablet.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,4 +39,18 @@ public class GameActivity extends Activity {
         gameView.pause();
     }
 
+    public void next() {
+        Intent intent = getIntent();
+        Bundle bundle = intent.getBundleExtra("data");
+        account = bundle.getString("account");
+        score = gameView.m_score;
+
+        intent = new Intent(GameActivity.this, RankActivity.class);
+        // Use Bundle for multiple parameters
+        bundle = new Bundle();
+        // Put in multiple parameters and turn to the new activity
+        bundle.putString("account", account);
+        intent.putExtra("score", score);
+        startActivity(intent);
+    }
 }
