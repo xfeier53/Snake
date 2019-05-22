@@ -119,7 +119,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // Pop up a dialog to show the rule of the game
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("How To Play??");
-                builder.setMessage("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                builder.setMessage("1. Swipe to control snake\n" +
+                        "2. Touch the red obstacle, the bound, the snake body, GAME OVER!\n" + 
+                        "3. White food: 1 mark, snake length increase, speed up\n" +
+                        "4. Darkblue food : 5 marks, snake length greatly increase, speed down\n" +
+                        "5. Skyblue fodd: 10 marks, snake won't increase, only 4 in each game");
                 // Positive button, need no action
                 builder.setPositiveButton("OK", null);
                 // Can not be cancel

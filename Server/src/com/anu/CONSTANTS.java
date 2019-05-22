@@ -1,6 +1,7 @@
 package com.anu;
 
 public interface CONSTANTS {
+	// Setting for the server and database
 	public static final String USER = "root";
 	public static final String PASSWORD = "123456";
 	public static final String DATABSEPORT = "3306";

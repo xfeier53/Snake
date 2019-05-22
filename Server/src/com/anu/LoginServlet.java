@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginServlet extends HttpServlet {
 	
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=utf-8");
+        // Setting for the content type and encoding
+    	response.setContentType("text/html;charset=utf-8");
         response.setCharacterEncoding("UTF-8");
+        // Get parameters
         String account = request.getParameter("account");
         String password = request.getParameter("password");
                 
@@ -19,6 +21,7 @@ public class LoginServlet extends HttpServlet {
         Login login = new Login();        
         boolean isLoginSuccessful = login.userLogin(account, password);
         PrintWriter out = response.getWriter();
+        // Write in the result
         if(isLoginSuccessful){
             result = "success";
         }
