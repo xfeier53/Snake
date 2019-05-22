@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class SetRecord {
-	public String setBestScore(String recordString){
+	public String setRecord(String recordString){
 		String result = "fail";
 		
 		// Set query

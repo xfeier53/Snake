@@ -138,7 +138,7 @@ public class HTTPConnection {
         String result = "";
         try {
             // Request content
-            String data = "account=" + URLEncoder.encode(account, "UTF-8") + "&BestScore=" + thisScore;
+            String data = "account=" + URLEncoder.encode(account, "UTF-8") + "&bestScore=" + thisScore;
             HttpURLConnection conn = init(address, data);
             if (conn.getResponseCode() == 200) {
                 // Get input stream and read by byte

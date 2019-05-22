@@ -50,4 +50,13 @@
         <servlet-name>SetRecord</servlet-name>
         <url-pattern>/setRecord</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>SetBestScore</servlet-name>
+        <servlet-class>com.anu.SetBestScoreServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetBestScore</servlet-name>
+        <url-pattern>/setBestScore</url-pattern>
+    </servlet-mapping>
 </web-app>
