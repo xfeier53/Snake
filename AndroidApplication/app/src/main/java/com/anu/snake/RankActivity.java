@@ -11,14 +11,19 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class RankActivity extends AppCompatActivity {
 
     private Button restart, back;
     private final static int SCORE = 2;
+    private final static int RECORD = 3;
     private TextView thisScore, bestScore, record;
-    private String account;
-    private int myBestScore, myThisScore;
-    String test;
+    private String account, stringRecord, recordName;
+    private int myBestScore, myThisScore, maxIndex;
+    private List<Data> recordList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +36,13 @@ public class RankActivity extends AppCompatActivity {
         bestScore = findViewById(R.id.bestScore);
         record = findViewById(R.id.record);
 
-        Intent intent=getIntent();
-        Bundle bundle= intent.getBundleExtra("data");
+        Intent intent = getIntent();
+        Bundle bundle = intent.getBundleExtra("data");
         account = bundle.getString("account");
         myThisScore = bundle.getInt("score");
-        thisScore.setText(""+myThisScore);
+        thisScore.setText("" + myThisScore);
         getBestScore();
+        getRecord();
     }
 
     Handler handler = new Handler() {
@@ -47,7 +53,43 @@ public class RankActivity extends AppCompatActivity {
                 case SCORE: {
                     Bundle bundle = msg.getData();
                     myBestScore = bundle.getInt("result");
-                    bestScore.setText(""+myBestScore);
+                    bestScore.setText("" + myBestScore);
+                }
+                break;
+
+                case RECORD: {
+                    recordList = new ArrayList<>();
+                    Bundle bundle = msg.getData();
+                    stringRecord = bundle.getString("result");
+                    String[] rows = stringRecord.split(" ");
+                    for (int i = 0; i < 10; i++) {
+                        if (i % 2 == 0) {
+                            recordName = rows[i];
+                        } else {
+                            recordList.add(new Data(recordName, Integer.valueOf(rows[i])));
+                        }
+                    }
+
+                    for (int i = 0; i < 5; i++) {
+                        maxIndex = i;
+                        for (int j = i + 1; j < 5; j++) {
+                            if (recordList.get(maxIndex).score < recordList.get(j).score) {
+                                maxIndex = j;
+                            }
+                        }
+                        if (i != maxIndex) {
+                            Data temp = recordList.get(maxIndex);
+                            recordList.remove(maxIndex);
+                            recordList.add(maxIndex, recordList.get(i));
+                            recordList.remove(i);
+                            recordList.add(i, temp);
+                        }
+                    }
+                    stringRecord = "";
+                    for (Data d : recordList) {
+                        stringRecord = stringRecord + d.name + " " + d.score + "\n";
+                    }
+                    record.setText(stringRecord);
                 }
                 break;
             }
@@ -69,4 +111,28 @@ public class RankActivity extends AppCompatActivity {
         }).start();
     }
 
+    public void getRecord() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String result = HTTPConnection.GetRecord();
+                Bundle bundle = new Bundle();
+                bundle.putString("result", result);
+                Message msg = new Message();
+                msg.what = RECORD;
+                msg.setData(bundle);
+                handler.sendMessage(msg);
+            }
+        }).start();
+    }
+
+    class Data {
+        String name;
+        int score;
+
+        public Data(String name, int score) {
+            this.name = name;
+            this.score = score;
+        }
+    }
 }
