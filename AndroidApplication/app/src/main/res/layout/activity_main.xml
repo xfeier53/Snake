@@ -75,15 +75,4 @@
         android:layout_below="@+id/password"
         android:layout_alignRight="@+id/password"/>
 
-
-    <Button
-        android:id="@+id/test"
-        android:text="Test"
-        android:textColor="@color/colorPrimary"
-        android:layout_marginTop="50dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/password"
-        android:layout_alignRight="@+id/password"/>
-
 </RelativeLayout>

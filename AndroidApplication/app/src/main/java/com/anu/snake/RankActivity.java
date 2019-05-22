@@ -105,15 +105,10 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
                     }
                     if (flag == true) {
                         setRecord();
+                    } else {
+                        // Set the record for the activity
+                        record.setText(recordString);
                     }
-
-                    String temp[] = recordString.split(" ");
-                    recordString = "";
-                    for (int i = 0; i < 10; i = i + 2) {
-                        recordString = recordString + temp[i] + " " + temp[i + 1] + "\n";
-                    }
-                    // Set the record for the activity
-                    record.setText(recordString);
                 }
                 break;
 
@@ -124,6 +119,14 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
                     if (result.equals("success")) {
                         // New record
                         Toast.makeText(RankActivity.this, "New Record！", Toast.LENGTH_SHORT).show();
+                        Log.d("test", recordString);
+                        String temp[] = recordString.split(" ");
+                        recordString = "";
+                        for (int i = 0; i < 10; i = i + 2) {
+                            recordString = recordString + temp[i] + " " + temp[i + 1] + "\n";
+                        }
+                        // Set the record for the activity
+                        record.setText(recordString);
                     }
                 }
                 break;
@@ -210,7 +213,7 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.exit: {
+            case R.id.restart: {
                 Intent intent = new Intent(this, GameActivity.class);
                 // Use Bundle for multiple parameters
                 Bundle bundle = new Bundle();
@@ -220,7 +223,7 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
             }
             break;
-            case R.id.restart: {
+            case R.id.exit: {
                 // Turn to the register page
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);

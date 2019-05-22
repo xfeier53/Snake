@@ -20,10 +20,11 @@ public class SetRecord {
 
         String[] record = recordString.split(" ");
         for (int i = 0; i < 10; i = i + 2) {
-        	insertQuery = insertQuery + "(\"" + record[i] + "\"," + record[i + 1] + "), ";
+        	insertQuery = insertQuery + "(\"" + record[i] + "\", " + record[i + 1] + "), ";
         }
         insertQuery = insertQuery.substring(0, insertQuery.length() - 2);
         insertQuery = insertQuery + ";";    
+        System.out.println(insertQuery);
         
         try{
         	// Get the driver class

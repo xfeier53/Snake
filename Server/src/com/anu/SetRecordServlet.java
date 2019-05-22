@@ -19,7 +19,7 @@ public class SetRecordServlet extends HttpServlet {
     	response.setContentType("text/html;charset=utf-8");
         response.setCharacterEncoding("UTF-8");
         // Get parameters
-        String recordString = request.getParameter("recordString");
+        String recordString = request.getParameter("data");
         SetRecord setRecord = new SetRecord();
         String result = setRecord.setRecord(recordString);
         // Write in the result

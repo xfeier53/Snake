@@ -124,7 +124,8 @@ public class HTTPConnection {
         String address = "http://" + CONSTANTS.IP + ":" + CONSTANTS.PORT + "/AndroidServer/setRecord";
         String result = "";
         try {
-            HttpURLConnection conn = init(address, "recordString");
+            String data = "data=" + URLEncoder.encode(recordString, "UTF-8");
+            HttpURLConnection conn = init(address, data);
             if (conn.getResponseCode() == 200) {
                 // Get input stream and read by byte
                 InputStream is = conn.getInputStream();

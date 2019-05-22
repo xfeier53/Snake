@@ -20,8 +20,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button login, register, howToPlay;
     private EditText account, password;
 
-    private Button test;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +34,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         howToPlay.setOnClickListener(this);
         account = findViewById(R.id.account);
         password = findViewById(R.id.password);
-
-        test = findViewById(R.id.test);
-        test.setOnClickListener(this);
     }
 
     @Override
@@ -111,17 +106,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // Turn to the register page
                 Intent intent = new Intent(this, RegisterActivity.class);
                 startActivityForResult(intent, CONSTANTS.MAIN_REQUEST_REGISTER);
-            }
-            break;
-            case R.id.test: {
-                Intent intent = new Intent(MainActivity.this, RankActivity.class);
-                // Use Bundle for multiple parameters
-                Bundle bundle = new Bundle();
-                // Put in multiple parameters and turn to the new activity
-                bundle.putString("account", "Yuan");
-                bundle.putInt("score", 5000);
-                intent.putExtra("data", bundle);
-                startActivity(intent);
             }
             break;
 
