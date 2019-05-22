@@ -1,3 +1,7 @@
+/*
+Authorship: Feier Xiao
+ */
+
 package com.anu.snake;
 
 import android.app.AlertDialog;
@@ -60,7 +64,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // Process based on the response information
                     try {
                         if (result.equals("success")) {
-                            Toast.makeText(MainActivity.this, "Login Successfully！", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                            // Use Bundle for multiple parameters
+                            bundle = new Bundle();
+                            // Put in multiple parameters and turn to the new activity
+                            bundle.putString("account", "Yuan");
+                            intent.putExtra("data", bundle);
+                            startActivity(intent);
                         } else {
                             Toast.makeText(MainActivity.this, "Fail！", Toast.LENGTH_SHORT).show();
                         }

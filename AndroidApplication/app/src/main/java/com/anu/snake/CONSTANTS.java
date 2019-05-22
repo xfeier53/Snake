@@ -1,3 +1,7 @@
+/*
+Authorship: Feier Xiao
+ */
+
 package com.anu.snake;
 
 import java.util.regex.Pattern;

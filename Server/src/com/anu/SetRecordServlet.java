@@ -1,3 +1,7 @@
+/*
+Authorship: Feier Xiao
+ */
+
 package com.anu;
 
 import java.io.IOException;
@@ -17,7 +21,7 @@ public class SetRecordServlet extends HttpServlet {
         // Get parameters
         String recordString = request.getParameter("recordString");
         SetRecord setRecord = new SetRecord();
-        String result = setRecord.setBestScore(recordString);
+        String result = setRecord.setRecord(recordString);
         // Write in the result
         PrintWriter out = response.getWriter();
         out.write(result);
