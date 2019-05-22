@@ -1,5 +1,6 @@
 package com.example.snake;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
@@ -21,7 +22,15 @@ import java.util.Random;
 
 
 import java.util.List;
-
+/*
+Authorship: Yu Wang
+            Tao Xu
+            Yue Zhou
+ */
+/*
+Class clarification:
+GameView defines the main layout and main logic of our snake's game.
+ */
 public class GameView extends SurfaceView implements Runnable {
     private Thread m_Thread = null;
     private volatile boolean m_Playing;
@@ -43,11 +52,13 @@ public class GameView extends SurfaceView implements Runnable {
     private int food_y;
     private int obstacle_x;
     private int obstacle_y;
+    private Paint obstacle_paint = new Paint();
     private int normal_count = 0;
     private int special_food_x;
     private int special_food_y;
     private int reference_count = 5;
     private Paint special_food_paint = new Paint();
+    private Paint surprise_paint = new Paint();
     private int block_size;
     private final int block_wide = 40;
     private int block_high;
@@ -55,13 +66,27 @@ public class GameView extends SurfaceView implements Runnable {
     private int y;
     private boolean firstTouch = false;
     private boolean isPause = false;
+    private int surprise_food_1_x = 0;
+    private int surprise_food_1_y = 0;
+    private int surprise_food_2_x = block_wide-1;
+    private int surprise_food_2_y = 0;
+    private int surprise_food_3_x = 0;
+    private int surprise_food_3_y = block_high-1;
+    private int surprise_food_4_x = block_wide-1;
+    private int surprise_food_4_y = block_high-1;
+    private boolean surprise_food_1 = true;
+    private boolean surprise_food_2 = true;
+    private boolean surprise_food_3 = true;
+    private boolean surprise_food_4 = true;
 
+    //The constructor of the GameView, which defines the layout size. Also, the game start when the
+    //constructor is called.
     public GameView(Context context, Point size) {
         super(context);
         m_context = context;
         screen_width = size.x;
         screen_height = size.y;
-
+        //Define the every pixel block size of the game layout
         block_size = screen_width/block_wide;
         block_high = screen_height/block_size;
 
@@ -77,6 +102,7 @@ public class GameView extends SurfaceView implements Runnable {
         startGame();
     }
 
+    //The run() method updates the game and draw the game.
     @Override
     public void run(){
         while(m_Playing){
@@ -86,7 +112,7 @@ public class GameView extends SurfaceView implements Runnable {
             }
         }
     }
-
+    //This method pauses the game
     public void pause(){
         m_Playing=false;
         try{
@@ -95,43 +121,62 @@ public class GameView extends SurfaceView implements Runnable {
             //Error
         }
     }
-
+    //This method make the game resume
     public void resume(){
         m_Playing = true;
         m_Thread = new Thread(this);
         m_Thread.start();
     }
 
-
+    //This method starts the game, generates the food, obstacle. Also, the special food will be generated
+    //when the score is a multiple of 5.
     public void startGame(){
         // start game with a snake head
         snake_length = 1;
         snake_x[0] = block_wide / 2;
         snake_y[0] = block_high / 2;
 
-
         // Add a mouse to eat
         spawnFood();
 
-
+        //Add a special food
         special_food();
-
         // Add an obstacle
         spawnObstacle();
-
         // initial socre to 0
         m_score= 0;
+
+        // initial normal food counts
+        normal_count = 0;
+
+        // initial game speed
+        FPS = 5;
 
         m_NextFrameTime = System.currentTimeMillis();
     }
 
-    // initial a mouse
+    // Initial a food
     public void spawnFood() {
         Random random = new Random();
         food_x = random.nextInt(block_wide - 1) + 1;
         food_y = random.nextInt(block_high - 1) + 1;
     }
 
+    //Initialize the surprise food in the corner.
+    public void surprise_food(){
+
+            surprise_food_1_x = 0;
+            surprise_food_1_y = 0;
+            surprise_food_2_x = block_wide - 1;
+            surprise_food_2_y = 0;
+            surprise_food_3_x = 0;
+            surprise_food_3_y = block_high - 1;
+            surprise_food_4_x = block_wide - 1;
+            surprise_food_4_y = block_high - 1;
+
+    }
+
+    //Initial a obstacle
     public void spawnObstacle() {
         Random random = new Random();
         obstacle_x = random.nextInt(block_wide - 3) + 1;
@@ -141,12 +186,18 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
+    //Initial a special food/bonus food
     public void special_food(){
         Random random = new Random();
         special_food_x = random.nextInt(block_wide - 1) + 1;
         special_food_y = random.nextInt(block_high - 1) + 1;
+        while(food_x>=special_food_x && special_food_x<=food_x+2 && food_y>=special_food_y && special_food_y<=food_y+5&&special_food_x>= obstacle_x&& special_food_x<=obstacle_x+2 && special_food_y>=obstacle_y && special_food_y<=obstacle_y+5){
+            spawnObstacle();
+        }
     }
 
+    //A method which is called when the snake move into the food (eat the food）
+    //The food's position is updated and the obstacle's position is also updated
     private void eatFood(){
         // increase the length of snake after eating food
         normal_count++;
@@ -154,22 +205,32 @@ public class GameView extends SurfaceView implements Runnable {
 
         // add another food
         spawnFood();
-
+        surprise_food();
         // add another obstacle
         spawnObstacle();
 
         // update score
         m_score++;
-    }
 
+        // speed up the snake
+        speedUp();
+    }
+    //This function is called when the snake eats the special food, the length of the snake will be
+    //added 5 if the special food is eaten.
     private void eat_special_Food(){
         snake_length += 5;
         m_score += 5;
         special_food();
         normal_count=0;
+        // slow down the snake
+        slowDown();
     }
 
-
+    //This function add 10 to score after eating a suprise food
+ private void eat_surprise(){
+     m_score += 10;
+ }
+//This function moves the snake during the game.
     private void moveSnake(){
         for(int i = snake_length; i > 0; i--){
             snake_x[i] = snake_x[i - 1];
@@ -193,6 +254,8 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
+    //This function will be triggered if the snake runs into the wall, runs into the obstacle or runs
+    //into itself.
     private boolean detectDeath(){
         boolean dead = false;
 
@@ -216,14 +279,14 @@ public class GameView extends SurfaceView implements Runnable {
                 dead = true;
             }
         }
-
+        //check if hits the wall
         if (snake_x[0]>=obstacle_x && snake_x[0]<=obstacle_x+1 && snake_y[0]>=obstacle_y && snake_y[0]<=obstacle_y+4){
             dead = true;
         }
         return dead;
     }
 
-
+//This function updates the game when the snake eats the food, special food, surprise food or dies.
 public void updateGame(){
     if(snake_x[0]==food_x&&snake_y[0]==food_y){
         eatFood();
@@ -231,19 +294,38 @@ public void updateGame(){
     if(snake_x[0]==special_food_x&&snake_y[0]==special_food_y){
         eat_special_Food();
     }
+    if(snake_x[0]==surprise_food_1_x&&snake_y[0]==surprise_food_1_y){
+        eat_surprise();
+        surprise_food_1 = false;
+    }
+    if(snake_x[0]==surprise_food_2_x&&snake_y[0]==surprise_food_2_y){
+        eat_surprise();
+        surprise_food_2 = false;
+    }
+    if(snake_x[0]==surprise_food_3_x&&snake_y[0]==surprise_food_3_y){
+        eat_surprise();
+        surprise_food_3 = false;
+    }
+    if(snake_x[0]==surprise_food_4_x&&snake_y[0]==surprise_food_4_y){
+        eat_surprise();
+        surprise_food_4 = false;
+    }
     moveSnake();
     if(detectDeath()){
         startGame();
     }
 }
+//This is the function which draw the entire game layout, snake, food, special food and obstacle.
 public void drawGame(){
     if(m_Holder.getSurface().isValid()){
         canvas = m_Holder.lockCanvas();
         canvas.drawColor(Color.argb(255,120,197,87));
         m_Paint.setColor(Color.argb(255, 255, 255, 255));
+        surprise_paint.setColor(Color.argb(255,80,255,255));
+        obstacle_paint.setColor(Color.argb(255,255,120,120));
         special_food_paint.setColor(Color.argb(255,120,120,255));
         m_Paint.setTextSize(30);
-        canvas.drawText("Score: "+m_score,10,30,m_Paint);
+        canvas.drawText("Score: "+m_score,screen_width/2,30,m_Paint);
         // snake drawing
         for (int i = 0; i < snake_length; i++) {
             canvas.drawRect(snake_x[i] * block_size,
@@ -252,18 +334,32 @@ public void drawGame(){
                     (snake_y[i] * block_size) + block_size,
                     m_Paint);
         }
-        //food
+        //draw the surprise food when the score is more than 10
+        if(m_score>=6) {
+            if (surprise_food_1)
+                canvas.drawRect(surprise_food_1_x * block_size, (surprise_food_1_y * block_size), (surprise_food_1_x * block_size) + block_size, (surprise_food_1_y * block_size) + block_size, surprise_paint);
+            if (surprise_food_2)
+                canvas.drawRect(surprise_food_2_x * block_size, (surprise_food_2_y * block_size), (surprise_food_2_x * block_size) + block_size, (surprise_food_2_y * block_size) + block_size, surprise_paint);
+            if (surprise_food_3)
+                canvas.drawRect(surprise_food_3_x * block_size, (surprise_food_3_y * block_size), (surprise_food_3_x * block_size) + block_size, (surprise_food_3_y * block_size) + block_size, surprise_paint);
+            if (surprise_food_4)
+                canvas.drawRect(surprise_food_4_x * block_size, (surprise_food_4_y * block_size), (surprise_food_4_x * block_size) + block_size, (surprise_food_4_y * block_size) + block_size, surprise_paint);
+        }
+        //food and special food
         if (normal_count!=reference_count)
             canvas.drawRect(food_x*block_size,(food_y*block_size),(food_x*block_size)+block_size,(food_y*block_size)+block_size,m_Paint);
         else{
             canvas.drawRect(special_food_x*block_size,(special_food_y*block_size),(special_food_x*block_size)+block_size,(special_food_y*block_size)+block_size,special_food_paint);
         }
-        canvas.drawRect(obstacle_x*block_size,(obstacle_y*block_size),(obstacle_x*block_size)+block_size*2,(obstacle_y*block_size)+block_size*5,m_Paint);
+        //obstacle
+        canvas.drawRect(obstacle_x*block_size,(obstacle_y*block_size),(obstacle_x*block_size)+block_size*2,(obstacle_y*block_size)+block_size*5,obstacle_paint);
         //draw
         m_Holder.unlockCanvasAndPost(canvas);
     }
 
 }
+
+//This function checks whether the game should be updated
 public boolean checkForUpdate(){
     if(m_NextFrameTime<=System.currentTimeMillis()){
         m_NextFrameTime=System.currentTimeMillis()+milli_second/FPS;
@@ -271,22 +367,13 @@ public boolean checkForUpdate(){
     }
     return false;
 }
-
+//This function defines the onTouchEvent, the snake will move the direction that the user slides into.
+// using swipe to control  the snake
 public boolean onTouchEvent(MotionEvent motionEvent){
-            int action = motionEvent.getAction()  & MotionEvent.ACTION_MASK;
-
+        int action = motionEvent.getAction()  & MotionEvent.ACTION_MASK;
            if (action == MotionEvent.ACTION_DOWN) {
-               long time= System.currentTimeMillis();
-                if(firstTouch &&(System.currentTimeMillis() - time) <= 500){
-                    firstTouch = false;
-                    Log.d("1111",m_Playing +"");
-                    isPause = !isPause;
-                }else{
-                    firstTouch = true;
-                    time = System.currentTimeMillis();
                     x = (int) (motionEvent.getX());
                     y = (int) (motionEvent.getY());
-               }
            }
             if (action== MotionEvent.ACTION_UP) {
                 int x = (int) (motionEvent.getX());
@@ -309,17 +396,30 @@ public boolean onTouchEvent(MotionEvent motionEvent){
                 }
                 if (m_direction == SnakeDirection.TOP || m_direction == SnakeDirection.BOTTOM) {
                     if(direction==SnakeDirection.TOP ||direction==SnakeDirection.BOTTOM ){
+                        // if current direction is up and down, do nothing;
                     }else{
                         m_direction = direction;
                     }
                 } else if (m_direction == SnakeDirection.LEFT || m_direction == SnakeDirection.RIGHT) {
                     if(direction==SnakeDirection.LEFT ||direction==SnakeDirection.RIGHT ){
+                        // if current direction is left and right, do nothing;
                     }else{
                         m_direction = direction;
                     }
                 }
             }
+            return true;
 
-    return true;
+
 }
+
+// This function will speed up the snake after eating food
+    private void speedUp(){
+        FPS++;
+    }
+
+    // This function will speed up the snake after eating a special food
+    private void slowDown(){
+        FPS -= 2;
+    }
 }
