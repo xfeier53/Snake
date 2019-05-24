@@ -12,14 +12,9 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
+public class AndroidUnitTest {
     // Test the function, so we need no Context
     GameView gv = new GameView(new Point(200, 200));
-
-    @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-    }
 
     @Test
     public void testSurpriseFood () {
@@ -39,12 +34,15 @@ public class ExampleUnitTest {
         assertEquals(1, gv.normal_count);
         assertEquals(1, gv.snake_length);
         assertEquals(1, gv.m_score);
-
         gv.eatFood();
         gv.eatFood();
         assertEquals(3, gv.normal_count);
         assertEquals(3, gv.snake_length);
         assertEquals(3, gv.m_score);
+        gv.eatFood();
+        assertEquals(4, gv.normal_count);
+        assertEquals(4, gv.snake_length);
+        assertEquals(4, gv.m_score);
     }
 
 }
