@@ -20,15 +20,16 @@ public class AndroidUnitTest {
 
     @Test
     public void testSurpriseFood () {
+        gv.block_high = 100;
         gv.surprise_food();
         assertEquals(1, gv.surprise_food_1_x);
         assertEquals(1, gv.surprise_food_1_y);
-        assertEquals(gv.block_wide - 2, gv.surprise_food_2_x);
+        assertEquals(38, gv.surprise_food_2_x);
         assertEquals(1, gv.surprise_food_2_y);
         assertEquals(1, gv.surprise_food_3_x);
-        assertEquals(gv.block_high - 2, gv.surprise_food_3_y);
-        assertEquals(gv.block_wide - 2, gv.surprise_food_4_x);
-        assertEquals(gv.block_high - 2, gv.surprise_food_4_y);
+        assertEquals(98, gv.surprise_food_3_y);
+        assertEquals(38, gv.surprise_food_4_x);
+        assertEquals(98, gv.surprise_food_4_y);
     }
 
     @Test
@@ -127,5 +128,17 @@ public class AndroidUnitTest {
         assertEquals(10, gv.snake_x[0]);
         assertEquals(20, gv.snake_y[0]);
 
+    }
+
+    @Test
+    public void testStartGame() {
+        gv.snake_x = new int[200];
+        gv.snake_y = new int[200];
+        gv.block_high = 100;
+        gv.startGame();
+        assertEquals(1, gv.snake_length);
+        assertEquals(0, gv.m_score);
+        assertEquals(0, gv.normal_count);
+        assertEquals(5, gv.FPS);
     }
 }
