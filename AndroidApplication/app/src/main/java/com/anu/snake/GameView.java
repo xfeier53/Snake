@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /*
+ @author Yuezhou u6682532, TaoXu u5527268,YuWang
 Class clarification:
 GameView defines the main layout and main logic of our snake's game.
  */
@@ -384,7 +385,8 @@ public void drawGame(){
     }
 
     //This function defines the onTouchEvent, the snake will move the direction that the user slides into.
-// using swipe to control  the snake
+    // using swipe to control  the snake
+    //@author Yuezhou u6682532
     public boolean onTouchEvent(MotionEvent motionEvent) {
         int action = motionEvent.getAction() & MotionEvent.ACTION_MASK;
         if (action == MotionEvent.ACTION_DOWN) {
