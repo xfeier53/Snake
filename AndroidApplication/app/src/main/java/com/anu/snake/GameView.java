@@ -25,63 +25,58 @@ Class clarification:
 GameView defines the main layout and main logic of our snake's game.
  */
 public class GameView extends SurfaceView implements Runnable {
-    static boolean isDead = false;
-    private Thread m_Thread = null;
-    private volatile boolean m_Playing;
-    private Canvas canvas;
-    private SurfaceHolder m_Holder;
-    private Paint m_Paint;
-    private Context m_context;
-    private SnakeDirection m_direction = SnakeDirection.RIGHT;
-    private int screen_width;
-    private int screen_height;
-    private long m_NextFrameTime;
-    private long FPS = 5;
-    private final long milli_second = 1000;
+    public Thread m_Thread = null;
+    public volatile boolean m_Playing;
+    public Canvas canvas;
+    public SurfaceHolder m_Holder;
+    public Paint m_Paint;
+    public SnakeDirection m_direction = SnakeDirection.RIGHT;
+    public int screen_width;
+    public int screen_height;
+    public long m_NextFrameTime;
+    public long FPS = 5;
+    public final long milli_second = 1000;
     static int m_score;
-    private int[] snake_x;
-    private int[] snake_y;
-    private int snake_length;
-    private int food_x;
-    private int food_y;
-    private int obstacle_x;
-    private int obstacle_y;
-    private Paint obstacle_paint = new Paint();
-    private Random rand_special = new Random();
-    private int normal_count = 0;
-    private boolean special_food;
-    private int special_food_x;
-    private int special_food_y;
-    private int reference_count = 5;
-    private Paint special_food_paint = new Paint();
-    private Paint surprise_paint = new Paint();
-    private int block_size;
-    private final int block_wide = 40;
-    private int block_high;
-    private int x;
-    private int y;
-    private boolean firstTouch = false;
-    private boolean isPause = false;
-    private int surprise_food_1_x;
-    private int surprise_food_1_y;
-    private int surprise_food_2_x;
-    private int surprise_food_2_y;
-    private int surprise_food_3_x;
-    private int surprise_food_3_y;
-    private int surprise_food_4_x;
-    private int surprise_food_4_y;
-    private boolean surprise_food_1 = true;
-    private boolean surprise_food_2 = true;
-    private boolean surprise_food_3 = true;
-    private boolean surprise_food_4 = true;
-    private ArrayList<int[]> obstacles = new ArrayList<>();
-    private final int obstacleCounts = 5;
+    public int[] snake_x;
+    public int[] snake_y;
+    public int snake_length;
+    public int food_x;
+    public int food_y;
+    public int obstacle_x;
+    public int obstacle_y;
+    public Paint obstacle_paint = new Paint();
+    public Random rand_special = new Random();
+    public int normal_count = 0;
+    public boolean special_food;
+    public int special_food_x;
+    public int special_food_y;
+    public int reference_count = 5;
+    public Paint special_food_paint = new Paint();
+    public Paint surprise_paint = new Paint();
+    public int block_size;
+    public final int block_wide = 40;
+    public int block_high;
+    public int x;
+    public int y;
+    public boolean isPause = false;
+    public int surprise_food_1_x;
+    public int surprise_food_1_y;
+    public int surprise_food_2_x;
+    public int surprise_food_2_y;
+    public int surprise_food_3_x;
+    public int surprise_food_3_y;
+    public int surprise_food_4_x;
+    public int surprise_food_4_y;
+    public boolean surprise_food_1 = true;
+    public boolean surprise_food_2 = true;
+    public boolean surprise_food_3 = true;
+    public boolean surprise_food_4 = true;
+    public ArrayList<int[]> obstacles = new ArrayList<>();
 
     //The constructor of the GameView, which defines the layout size. Also, the game start when the
     //constructor is called.
     public GameView(Context context, Point size) {
         super(context);
-        m_context = context;
         screen_width = size.x;
         screen_height = size.y;
         //Define the every pixel block size of the game layout
@@ -99,6 +94,10 @@ public class GameView extends SurfaceView implements Runnable {
 
         // Start the game
         startGame();
+    }
+    // For test only
+    public GameView(Point size) {
+        super(null);
     }
 
     //The run() method updates the game and draw the game.
@@ -205,7 +204,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     //A method which is called when the snake move into the food (eat the food）
     //The food's position is updated and the obstacle's position is also updated
-    private void eatFood() {
+    public void eatFood() {
         // increase the length of snake after eating food
         normal_count++;
         snake_length++;
@@ -224,7 +223,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     //This function is called when the snake eats the special food, the length of the snake will be
     //added 5 if the special food is eaten.
-    private void eat_special_Food() {
+    public void eat_special_Food() {
         snake_length += 5;
         m_score += 5;
         special_food();
@@ -234,12 +233,12 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     //This function add 10 to score after eating a suprise food
-    private void eat_surprise() {
+    public void eat_surprise() {
         m_score += 10;
     }
 
     //This function moves the snake during the game.
-    private void moveSnake() {
+    public void moveSnake() {
         for (int i = snake_length; i > 0; i--) {
             snake_x[i] = snake_x[i - 1];
             snake_y[i] = snake_y[i - 1];
@@ -428,12 +427,12 @@ public void drawGame(){
     }
 
     // This function will speed up the snake after eating food
-    private void speedUp() {
+    public void speedUp() {
         FPS++;
     }
 
     // This function will speed up the snake after eating a special food
-    private void slowDown() {
+    public void slowDown() {
         FPS -= 2;
     }
 }
