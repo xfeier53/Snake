@@ -61,6 +61,7 @@ public class RankActivity extends AppCompatActivity implements View.OnClickListe
                     bestScore.setText("" + myBestScore);
                     if (myThisScore > myBestScore) {
                         setBestScore();
+                        bestScore.setText("" + myThisScore);
                     }
                 }
                 break;
