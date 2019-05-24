@@ -23,8 +23,12 @@ public class AndroidUnitTest {
         gv.surprise_food();
         assertEquals(1, gv.surprise_food_1_x);
         assertEquals(1, gv.surprise_food_1_y);
+        assertEquals(gv.block_wide - 2, gv.surprise_food_2_x);
         assertEquals(1, gv.surprise_food_2_y);
         assertEquals(1, gv.surprise_food_3_x);
+        assertEquals(gv.block_high - 2, gv.surprise_food_3_y);
+        assertEquals(gv.block_wide - 2, gv.surprise_food_4_x);
+        assertEquals(gv.block_high - 2, gv.surprise_food_4_y);
     }
 
     @Test
@@ -101,4 +105,27 @@ public class AndroidUnitTest {
         assertEquals(8, gv.FPS);
     }
 
+    @Test
+    public void testMoveSnake() {
+        gv.snake_length = 5;
+        gv.snake_x = new int[]{10, 11, 12, 13, 13, 13};
+        gv.snake_y = new int[]{20, 20, 20, 20, 21, 22};
+        gv.m_direction = SnakeDirection.TOP;
+        gv.moveSnake();
+        assertEquals(10, gv.snake_x[0]);
+        assertEquals(19, gv.snake_y[0]);
+        gv.m_direction = SnakeDirection.RIGHT;
+        gv.moveSnake();
+        assertEquals(11, gv.snake_x[0]);
+        assertEquals(19, gv.snake_y[0]);
+        gv.m_direction = SnakeDirection.BOTTOM;
+        gv.moveSnake();
+        assertEquals(11, gv.snake_x[0]);
+        assertEquals(20, gv.snake_y[0]);
+        gv.m_direction = SnakeDirection.LEFT;
+        gv.moveSnake();
+        assertEquals(10, gv.snake_x[0]);
+        assertEquals(20, gv.snake_y[0]);
+
+    }
 }
