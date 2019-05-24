@@ -40,7 +40,7 @@
         android:ems="10"
         android:hint="Account"
         android:inputType="text"
-        android:text="Feier"
+        android:text=""
         android:textColor="@color/colorPrimary" />
 
     <EditText
@@ -54,7 +54,7 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        android:text="123"
+        android:text=""
         android:textColor="@color/colorPrimary" />
 
     <Button
