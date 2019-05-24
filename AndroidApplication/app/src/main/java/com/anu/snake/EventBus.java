@@ -9,6 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Yuezhou u6682532
+ * this class used to handle the event communication among whole game
+ */
 public class EventBus {
     private volatile static EventBus instance;
     private Map<Class<?>, List<Subscription>> map;
@@ -30,14 +34,15 @@ public class EventBus {
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Subscribe {}
 
+    /**
+     * @param subscriber
+     */
     public void register(Object subscriber) {
         Class<?> clazz = subscriber.getClass();
-        //这里其实可能有NoClassDefFoundError，原版在捕获块里用的是getMethods()
         Method[] methods = clazz.getDeclaredMethods();
         for (Method m : methods) {
             if (m.isAnnotationPresent(Subscribe.class)) {
                 Subscribe s = m.getAnnotation(Subscribe.class);
-                //原版在这区分了不同参数列表的情况
                 Class<?> c = m.getParameterTypes()[0];
                 List<Subscription> list = map.get(c);
                 if (list == null) {
