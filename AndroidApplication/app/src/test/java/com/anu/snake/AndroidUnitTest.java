@@ -128,4 +128,28 @@ public class AndroidUnitTest {
         assertEquals(20, gv.snake_y[0]);
 
     }
+
+    @Test
+    public void testDetectDeath(){
+        gv.snake_length = 5;
+        gv.snake_x = new int[]{10, 11, 12, 13, 13, 13};
+        gv.snake_y = new int[]{20, 20, 20, 20, 21, 22};
+        assertEquals(false,gv.detectDeath());
+        gv.snake_x = new int[]{-1};
+        assertEquals(true,gv.detectDeath());
+        gv.snake_x = new int[]{gv.block_wide+1, 1,2,3};
+        assertEquals(true,gv.detectDeath());
+        gv.snake_y = new int[]{-1};
+        assertEquals(true,gv.detectDeath());
+        gv.snake_y = new int[]{gv.block_high+1};
+        assertEquals(true,gv.detectDeath());
+
+        gv.snake_x = new int[]{2,3,4,4,3,3};
+        gv.snake_x = new int[]{2,2,2,3,3,2};
+        assertEquals(true,gv.detectDeath());
+
+        gv.obstacle_x = 2;
+        gv.obstacle_y = 2;
+        assertEquals(true,gv.detectDeath());
+    }
 }
