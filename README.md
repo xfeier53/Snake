@@ -13,3 +13,18 @@ Steps to set up the environment:
 3. Make sure the Android device and server are in the same network, and retrieve the IP address of the server
 4. Change the IPAddress variable in CONSTANTS interface to the IP address of the server
 5. Run the Android application
+
+Team structure and roles
+
+Feier Xiao u6609337 - Team leader, J2EE developer, DBA, Login/Register/Rank Activity Implementation
+Yue Zhou u6682532 - Gesture Function/Game Activity Implementation
+Yu Wang u5762606 - GameView Class/Game Activity Implementation, Documentation
+Tao Xu u5527268 - Time Line/UI Implementation, Debugging
+
+App Overview
+
+The game we implemented on the Android phone is inspired by the popular game “Snake”
+The object of the game is to direct a snake to eat different foods, meanwhile, avoid walls and obstacles to survive and win a high score
+The snake starts at the center of the screen. It must eat foods and avoid walls which contain tracks with different moving speed.
+The food has three types with different buff, normal type(white), earn 1 mark and slightly speed up, special type(dark blue), earn 5 marks and slow down a little, bonus type(sky blue, only 4 in each round), earn 10 marks.
+The snake, by swiping the screen to control its direction. Once the snake hits walls or obstacles, the game will end and the top 5 scores will be displayed with the player’s name and their corresponding score at the leader board.
