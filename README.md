@@ -28,3 +28,5 @@ The object of the game is to direct a snake to eat different foods, meanwhile, a
 The snake starts at the center of the screen. It must eat foods and avoid walls which contain tracks with different moving speed.
 The food has three types with different buff, normal type(white), earn 1 mark and slightly speed up, special type(dark blue), earn 5 marks and slow down a little, bonus type(sky blue, only 4 in each round), earn 10 marks.
 The snake, by swiping the screen to control its direction. Once the snake hits walls or obstacles, the game will end and the top 5 scores will be displayed with the player’s name and their corresponding score at the leader board.
+
+![Screenshot](Screenshot.png)
